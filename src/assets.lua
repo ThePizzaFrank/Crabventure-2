@@ -1,6 +1,8 @@
 module(...,package.seeall)
 
+defaultPath = "assets/sprites/"
+
 images = {
-  enemy = love.graphics.newImage("assets/sprites/enemy.png"),
-  wall_1 = love.graphics.newImage("assets/sprites/stoneWall.png")
+  enemy = love.graphics.newImage(defaultPath .. "/enemy.png"),
+  wall_1 = love.graphics.newImage(defaultPath.. "/stoneWall.png")
 }
