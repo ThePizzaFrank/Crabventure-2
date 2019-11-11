@@ -8,12 +8,14 @@ local filter = Filter.filter({"position","collider","movement"})
 function update(world)
   for _,entity in pairs(world) do
     if filter:fit(entity) then
+      nullify = false
       --find all dynamic colliders
       searchFilterDynamic = Filter.filter({"position","collider"})
       activeDynamicColliders = searchFilterDynamic:allFit(world)
       for _,e2 in pairs(activeDynamicColliders) do
         future = futurePosition(entity)
         if(future.x == e2.position.x and future.y == e2.position.y and entity.collider.id ~= e2.collider.id) then
+          nullify = true
           collision(entity,e2)
         end
       end
@@ -31,9 +33,15 @@ function update(world)
 end
 
 function futurePosition(entity)
+  local x = 0
+  local y = 0
+  if entity.movement then
+    x = entity.movement.x
+    y = entity.movement.y
+  end
   future = {
-    x = entity.position.x + entity.movement.x,
-    y = entity.position.y + entity.movement.y
+    x = entity.position.x + x,
+    y = entity.position.y + y
   }
   return future
 end
@@ -45,7 +53,11 @@ function collision(e1,e2)
 end
 
 function checkStatic(future,cMap)
-  return cMap[future.x][future.y] >= 1
+  if(cMap[future.x] and cMap[future.x][future.y]) then
+    return cMap[future.x][future.y] >= 1
+  else
+    return false;
+  end
 end
 
 function staticCollision(e1,e2)
