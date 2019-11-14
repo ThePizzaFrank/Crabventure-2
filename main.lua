@@ -2,6 +2,7 @@ module(...,package.seeall)
 Filter = require("src.utilities.filter")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
+staticTCMGrower = require("src.entities.staticTCMGrower")
 --component
 Components = require("src.components")
 --systems
@@ -14,12 +15,15 @@ ActionStep = require("src.systems.actionStep")
 Movement = require("src.systems.movement")
 Collision = require("src.systems.collision")
 CameraFollow = require("src.systems.cameraFollow")
+BuildMap = require("src.systems.buildMap")
+Debug = require("src.systems.debug")
 --Some global vars
 globals = require('src.utilities.globals')
 
 
 
 UpdateSystems = {
+  BuildMap,
   UpdateBatch,
   Collision
 }
@@ -32,7 +36,8 @@ TurnSystems = {
 DrawSystems = {
   CameraFollow,
   MultiDraw,
-  StaticDraw
+  StaticDraw,
+  Debug
 }
 
 KeyUpSystems = {
@@ -62,27 +67,21 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
-  cMap = {}
-  for i = -10, 10 do
-    cMap[i] = {}
-    for j = -10, 10 do
-      cMap[i][j] = 0
-    end
-  end
-  cMap[1][3] = 1
+  builder = staticTCMGrower.staticTCMGrower()
+  builder.builder.types = {1,2,5}
+  builder.builder.parameters[3] = {width = 3, sPos = {x = 3, y = 14}, ePos = {x = 14,y = 3}}
+  builder.builder.parameters[4] = {width = 3, height = 1, position = {x = 3, y = 10}}
+  builder.builder.width = 16
+  builder.builder.height = 16
+  builder.spriteMap.mapping = {"wall_1"}
+  builder.spriteMap.mapping[0] = "floor_1"
+  builder.camera = camera
   multiblob = StaticTexturedCollisionMap.staticTexturedCollisionMap()
-  multiblob.position = Components.position(0,0)
-  multiblob.collisionMap = Components.collisionMap()
-  multiblob.collisionMap.map = cMap
-  multiblob.spriteMap = Components.spriteMap()
-  multiblob.spriteMap.mapping = {"wall_1"}
-  multiblob.batchMap = Components.batchMap()
-  multiblob.dirtyBit = Components.dirtyBit(true)
   table.insert(multiblob.dirtyBit.target, {x = 1*globals.tileSize,y = 3*globals.tileSize})
   multiblob.camera = camera
   table.insert(world,blob)
-  table.insert(world,blob2)
-  table.insert(world,multiblob)
+  --table.insert(world,blob2)
+  table.insert(world,builder)
 end
 
 function love.draw()

@@ -2,15 +2,13 @@ module(...,package.seeall)
 
 Components = require("src.components")
 
-function staticTexturedCollisionMap()
+function staticTCMGrower()
   StaticCollisionMap =
   {
-    collisionMap = Components.collisionMap(),
+    builder = Components.builder(),
     position = Components.position(0,0),
     spriteMap = Components.spriteMap(),
-    batchMap = Components.batchMap(),
-    camera = nil,
-    dirtyBit = Components.dirtyBit(true)
+    camera = nil
   }
   return StaticCollisionMap
 end

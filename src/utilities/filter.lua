@@ -31,7 +31,6 @@ function filter(filterList)
         count = count + 1
       end
     end
-    print(count)
     return result;
   end
 

@@ -18,6 +18,18 @@ function collider(type)
   return Collider
 end
 
+function builder(type,width,height)
+  Builder = {
+    types = {},
+    --parameter contains elements whose indice correspond to the indices of the
+    --types array in the builder
+    parameters = {},
+    width = width,
+    height = height
+  }
+  return Builder
+end
+
 function collisionMap()
   CollisionMap = {
     map = {}
@@ -58,10 +70,12 @@ end
 function dirtyBit(bool)
   DirtyBit = {
     bit = bool,
+    --target contains key to the sprite x and y position coordinates
     target = {}
   }
   return DirtyBit
 end
+
 
 --delay after you do something
 function action(turns)
