@@ -18,18 +18,6 @@ function collider(type)
   return Collider
 end
 
-function builder(type,width,height)
-  Builder = {
-    types = {},
-    --parameter contains elements whose indice correspond to the indices of the
-    --types array in the builder
-    parameters = {},
-    width = width,
-    height = height
-  }
-  return Builder
-end
-
 function collisionMap()
   CollisionMap = {
     map = {}
@@ -46,6 +34,10 @@ end
 
 function spriteMap()
   SpriteMap = {
+    --key is a number
+    --0 for floor
+    --1 for wall
+    --value is an array of possible sprites
     mapping = {}
   }
   return SpriteMap
@@ -124,4 +116,33 @@ function cameraTarget(x,y)
     y = y
   }
   return CameraTarget
+end
+
+function chunks()
+  Chunks = {
+    chunks = {}
+  }
+  return Chunks
+end
+
+--chunk width is the size of chunk whereas width and height are the number of
+--chunks wide/high the map is
+function chunkData(chunkWidth, width, height)
+  ChunkData = {
+    chunkWidth = chunkWidth,
+    width = width,
+    height = height
+  }
+end
+
+function builder(type,width,height)
+  Builder = {
+    types = {},
+    --parameter contains elements whose indice correspond to the indices of the
+    --types array in the builder
+    parameters = {},
+    width = width,
+    height = height
+  }
+  return Builder
 end

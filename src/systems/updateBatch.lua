@@ -19,13 +19,15 @@ function update(world)
         for _,v in ipairs(dbit.target) do
           --find the associated value in the collision map at x and y of of the dbit target
           spriteKey = v.key
-          --get the name of the sprite from the sprite map
-          spriteName = smap[spriteKey]
+          --get the array of the possible sprites from the sprite map
+          spriteTypes = smap[spriteKey]
+          --pick one
+          spriteName = spriteTypes[love.math.random(#spriteTypes)]
           --get the associated sprite batch for that sprite
           batch = bmap[spriteName]
           --if batch doesnt exist
           if(batch == nil) then
-            print(spriteName)
+            --print(spriteName)
             entity.batchMap.mapping[spriteName] = love.graphics.newSpriteBatch(assets.images[spriteName])
           end
           entity.batchMap.mapping[spriteName]:add(v.x,v.y)

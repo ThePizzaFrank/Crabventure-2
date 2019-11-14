@@ -106,7 +106,6 @@ tube = function(world,cMap,width,height,parameters)
       newDistance.y = newDistance.y-movey
       attempts = attempts + 1
     end
-    print(attempts)
     --set distance to the new distance after the next point has been chosen
     distance = newDistance
     cMap = emptychunk(world,cMap,width,height,

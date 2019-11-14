@@ -1,5 +1,6 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
+Maze = require("src.utilities.maze")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 staticTCMGrower = require("src.entities.staticTCMGrower")
@@ -73,8 +74,8 @@ function love.load(arg)
   builder.builder.parameters[4] = {width = 3, height = 1, position = {x = 3, y = 10}}
   builder.builder.width = 16
   builder.builder.height = 16
-  builder.spriteMap.mapping = {"wall_1"}
-  builder.spriteMap.mapping[0] = "floor_1"
+  builder.spriteMap.mapping[1] = {"wall_1","wall_2"}
+  builder.spriteMap.mapping[0] = {"floor_1"}
   builder.camera = camera
   multiblob = StaticTexturedCollisionMap.staticTexturedCollisionMap()
   table.insert(multiblob.dirtyBit.target, {x = 1*globals.tileSize,y = 3*globals.tileSize})
@@ -82,6 +83,7 @@ function love.load(arg)
   table.insert(world,blob)
   --table.insert(world,blob2)
   table.insert(world,builder)
+  Maze.maze1(4,4,{x = 1,y = 1})
 end
 
 function love.draw()
