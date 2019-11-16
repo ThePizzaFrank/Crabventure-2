@@ -3,7 +3,8 @@ Filter = require("src.utilities.filter")
 Maze = require("src.utilities.maze")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
-staticTCMGrower = require("src.entities.staticTCMGrower")
+StaticTCMGrower = require("src.entities.staticTCMGrower")
+MapGenerator = require("src.entities.mapGenerator")
 --component
 Components = require("src.components")
 --systems
@@ -16,6 +17,7 @@ ActionStep = require("src.systems.actionStep")
 Movement = require("src.systems.movement")
 Collision = require("src.systems.collision")
 CameraFollow = require("src.systems.cameraFollow")
+BuildChunk = require("src.systems.buildChunk")
 BuildMap = require("src.systems.buildMap")
 Debug = require("src.systems.debug")
 --Some global vars
@@ -25,6 +27,7 @@ globals = require('src.utilities.globals')
 
 UpdateSystems = {
   BuildMap,
+  BuildChunk,
   UpdateBatch,
   Collision
 }
@@ -54,7 +57,7 @@ function love.load(arg)
   blob = {
     player = Components.player(),
     sprite = Components.sprite("enemy"),
-    position = Components.position(10,10),
+    position = Components.position(5,5),
     camera = camera,
     action = Components.action(0),
     stats = Components.stats(6),
@@ -68,22 +71,14 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
-  builder = staticTCMGrower.staticTCMGrower()
-  builder.builder.types = {1,2,5}
-  builder.builder.parameters[3] = {width = 3, sPos = {x = 3, y = 14}, ePos = {x = 14,y = 3}}
-  builder.builder.parameters[4] = {width = 3, height = 1, position = {x = 3, y = 10}}
-  builder.builder.width = 16
-  builder.builder.height = 16
-  builder.spriteMap.mapping[1] = {"wall_1","wall_2"}
-  builder.spriteMap.mapping[0] = {"floor_1"}
-  builder.camera = camera
-  multiblob = StaticTexturedCollisionMap.staticTexturedCollisionMap()
-  table.insert(multiblob.dirtyBit.target, {x = 1*globals.tileSize,y = 3*globals.tileSize})
-  multiblob.camera = camera
+
+  mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1})
+  mGen.camera = camera
+  mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
+  mGen.spriteMap.mapping[0] = {"floor_1"}
   table.insert(world,blob)
-  --table.insert(world,blob2)
-  table.insert(world,builder)
-  Maze.maze1(4,4,{x = 1,y = 1})
+  table.insert(world,mGen)
+  --table.insert(world,builder)
 end
 
 function love.draw()

@@ -127,12 +127,14 @@ end
 
 --chunk width is the size of chunk whereas width and height are the number of
 --chunks wide/high the map is
-function chunkData(chunkWidth, width, height)
+function chunkData(chunkWidth, width, height, start)
   ChunkData = {
     chunkWidth = chunkWidth,
     width = width,
-    height = height
+    height = height,
+    start = start
   }
+  return ChunkData
 end
 
 function builder(type,width,height)

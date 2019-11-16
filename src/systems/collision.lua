@@ -24,7 +24,7 @@ function update(world)
       activeStaticColliders = searchFilterStatic:allFit(world)
       for _,static in pairs(activeStaticColliders) do
         future = futurePosition(entity)
-        if(checkStatic(future,static.collisionMap.map)) then
+        if(checkStatic(future,static.collisionMap.map,static.position)) then
           staticCollision(entity,static)
         end
       end
@@ -52,9 +52,9 @@ function collision(e1,e2)
   end
 end
 
-function checkStatic(future,cMap)
-  if(cMap[future.x] and cMap[future.x][future.y]) then
-    return cMap[future.x][future.y] >= 1
+function checkStatic(future,cMap, pos)
+  if cMap[future.x-pos.x] and cMap[future.x-pos.x][future.y-pos.y] then
+    return cMap[future.x-pos.x][future.y-pos.y] >= 1
   else
     return false;
   end
