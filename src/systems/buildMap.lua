@@ -38,7 +38,7 @@ function update(world)
             table.insert(chunks[x][y],currentHole)
           end
           builder = StaticTCMGrower.staticTCMGrower()
-          if #chunks[x][y] == 2 then
+          if #chunks[x][y] == 2 and love.math.random(3) > 1 then
             builder.builder.types = {2,5}
             builder.builder.parameters[2] = {
               width = chunks[x][y][1].width,
@@ -49,7 +49,20 @@ function update(world)
             }
 
           else
-            builder.builder.types = {1}
+            builder.builder.types = {1,3}
+            count = 2
+            for h = 1, #chunks[x][y] do
+              count = count + 1
+              table.insert(builder.builder.types,4)
+              builder.builder.parameters[count] = {
+                width = chunks[x][y][h].width,
+                height = chunks[x][y][h].width,
+                position = {
+                  x = chunks[x][y][h].x,
+                  y = chunks[x][y][h].y
+                }
+              }
+            end
           end
           builder.builder.width = wid
           builder.builder.height = wid
