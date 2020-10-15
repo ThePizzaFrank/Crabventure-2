@@ -4,6 +4,7 @@ module(...,package.seeall)
 tileSize = 64;
 turns = 0;
 currentCollider = 0;
+scale = 1;
 
 CollisionEnum = {
   Player = 0,

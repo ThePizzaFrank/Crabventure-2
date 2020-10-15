@@ -4,23 +4,32 @@ Maze = require("src.utilities.maze")
 Components = require("src.components")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 
-local filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera"})
+local filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","id"})
 
 function update(world)
   for _,entity in pairs(world) do
     if filter:fit(entity) then
+      --width of map
       mwid = entity.chunkData.width
+      --height of map
       mhei = entity.chunkData.height
+      --width of one chunk in tiles
       wid = entity.chunkData.chunkWidth
+      --2d array of chunks
       chunks = entity.chunks.chunks
+
+      --get the maze from maze.lua, currently always uses maze1 but maybe I'll add more possible maze algorithms
       maze = Maze.maze1(mwid,mhei,entity.chunkData.start)
-      print(maze)
+
+      --build map 'chunks' based off the maze we created
+      --chunks are just an array of openings in each 'room'
       for x = 1, mwid do
         chunks[x] = {}
         for y = 1, mhei do
           chunks[x][y] = {}
-          print(x,y)
+          --maze spot is a shitty variable name for a 'room' in the maze
           mazeSpot = maze[x][y]
+          --list of attachment points for a room
           holes = mazeSpot.holes
 
           for _,hole in ipairs(holes) do
@@ -33,7 +42,7 @@ function update(world)
                 currentHole = genOpening(hole,wid,3)
               end
             else
-              currentHole = genOpening(hole,wid,3)
+              --currentHole = genOpening(hole,wid,3)
             end
             table.insert(chunks[x][y],currentHole)
           end
@@ -70,6 +79,7 @@ function update(world)
           builder.position.y = wid*(y-1)
           builder.spriteMap = entity.spriteMap
           builder.camera = entity.camera
+          builder.id = Components.id(entity.id.value)
           table.insert(world,builder)
         end
       end

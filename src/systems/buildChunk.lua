@@ -4,7 +4,9 @@ Components = require("src.components")
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 
 globals = require("src.utilities.globals")
-local filter = Filter.filter({"builder","spriteMap","position"})
+
+--usually looking for staticTCMGrower, Ideally we'd like to combine the chunks before finalizing them
+local filter = Filter.filter({"builder","spriteMap","position","id"})
 
 
 empty = function(world,cMap,width,height,parameters)
@@ -60,7 +62,6 @@ end
 tube = function(world,cMap,width,height,parameters)
   ePos = parameters.ePos
   sPos = parameters.sPos
-  print(width,parameters.width)
   distance = {x = ePos.x - sPos.x, y = ePos.y - sPos.y}
   cMap = emptychunk(world,cMap,width,height,
   {
@@ -82,12 +83,15 @@ tube = function(world,cMap,width,height,parameters)
       y = distance.y
     }
     attempts = 0
+    movexfin = 0
+    moveyfin = 0
     --make sure the maker is actually making progress by ensuring the next point is
     --closer to the endpoint than the last
     while math.sqrt(math.pow(newDistance.x,2) + math.pow(newDistance.y,2)) >=
       math.sqrt(math.pow(distance.x,2) + math.pow(distance.y,2)) do
       newDistance.x = distance.x
       newDistance.y = distance.y
+
 
       movex = xSign*love.math.random(
         math.min(-(parameters.width-2),math.abs(distance.x)),
@@ -101,25 +105,26 @@ tube = function(world,cMap,width,height,parameters)
         movex = xSign*math.min(1,math.abs(distance.x))
         movey = ySign*math.min(1,math.abs(distance.y))
       end
-      --print(movex,movey)
+
       newDistance.x = newDistance.x-movex
       newDistance.y = newDistance.y-movey
       posx = ePos.x-newDistance.x
       posy = ePos.y-newDistance.y
       if posx < 1 then
-        newDistance.x = newDistance.x - posx + 1
+        newDistance.x = newDistance.x - posx + math.ceil(width-parameters.width/2)
       end
       if posx > width-parameters.width/2 then
-        newDistance.x = newDistance.x-(posx-(width-parameters.width/2))
-        print("yee",posx, width-parameters.width)
+        newDistance.x = newDistance.x-(posx-math.ceil(width-parameters.width/2))
       end
       if posy < 1 then
-        newDistance.y = newDistance.y - posy + 1
+        newDistance.y = newDistance.y - posy + math.ceil(width-parameters.width/2)
       end
       if posy > width-parameters.width/2 then
-        newDistance.y = newDistance.y-(posy-(width-parameters.width/2))
+        newDistance.y = newDistance.y-(posy-math.ceil(width-parameters.width/2))
       end
       attempts = attempts + 1
+      movexfin = movex
+      moveyfin = movey
     end
     --set distance to the new distance after the next point has been chosen
     distance = newDistance
@@ -134,7 +139,8 @@ tube = function(world,cMap,width,height,parameters)
 end
 
 local types = {empty,full,walled,emptychunk,tube}
---builds a map from a buildType
+
+--builds a chunk from a buildType
 function update(world)
   for _,entity in pairs(world) do
     if filter:fit(entity) then
@@ -160,6 +166,7 @@ function update(world)
       entity.dirtyBit = dbit;
       entity.batchMap = Components.batchMap()
       entity.builder = nil
+      entity._type = "StaticTexturedCollisionMap"
     end
   end
 end

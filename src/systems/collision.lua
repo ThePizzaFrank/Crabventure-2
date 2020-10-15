@@ -47,9 +47,8 @@ function futurePosition(entity)
 end
 
 function collision(e1,e2)
-  if e2.collider.type == globals.CollisionEnum.Wall then
-    e1.movement = nil
-  end
+  e1.collider:colfunc(e1,e2)
+  e2.collider:colfunc(e2,e1)
 end
 
 function checkStatic(future,cMap, pos)

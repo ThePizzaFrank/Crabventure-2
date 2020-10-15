@@ -6,6 +6,9 @@ assets = require('src.assets')
 
 local filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit"})
 
+
+--this takes any static Textured Collision Maps that haven't had their spriteBatches generated
+--and updates the spritemap for it
 function update(world)
   for _,entity in pairs(world) do
     if filter:fit(entity) then
@@ -31,6 +34,7 @@ function update(world)
             entity.batchMap.mapping[spriteName] = love.graphics.newSpriteBatch(assets.images[spriteName])
           end
           entity.batchMap.mapping[spriteName]:add(v.x,v.y)
+          --print(v.x,v.y,spriteName,entity.batchMap.mapping[spriteName]:getCount())
         end
         dbit.target = {}
         dbit.bit = false

@@ -18,8 +18,8 @@ function update(world)
 end
 
 function draw(entity,batch)
-  local x = globals.tileSize*(entity.position.x)-entity.camera.x
-  local y = globals.tileSize*(entity.position.y)-entity.camera.y
+  local x = globals.tileSize*globals.scale*(entity.position.x)-entity.camera.x*globals.scale
+  local y = globals.tileSize*globals.scale*(entity.position.y)-entity.camera.y*globals.scale
   love.graphics.draw(
-    batch,x,y)
+    batch,x,y,0,globals.scale)
 end

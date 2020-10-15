@@ -12,7 +12,8 @@ function collider(type)
     height = 1,
     type = type,
     active = true,
-    id = globals.currentCollider
+    id = globals.currentCollider,
+    colfunc = function(e1,e2) end
   }
   globals.currentCollider = globals.currentCollider + 1
   return Collider
@@ -147,4 +148,28 @@ function builder(type,width,height)
     height = height
   }
   return Builder
+end
+
+function scrollData(min,max)
+  ScrollData = {
+    scrollPosition = 0,
+    --if min/max is not nil scrollPosition cannot go below min and cannot go above max respectively
+    scrollMin = min,
+    scrollMax = max
+  }
+  return ScrollData
+end
+
+function debugData()
+  DebugData = {
+    expanded = false
+  }
+  return DebugData
+end
+
+function id(val)
+  Id = {
+    value = val
+  }
+  return Id
 end
