@@ -34,6 +34,7 @@ function update(world)
 
           for _,hole in ipairs(holes) do
             currentHole = {x = 0, y = 0,width = 0}
+            --if chunk has already had its holes generated
             if chunks[x+hole.x] and chunks[x+hole.x][y+hole.y] then
               found = searchPair(hole,chunks[x+hole.x][y+hole.y])
               if found ~= nil then
@@ -41,28 +42,36 @@ function update(world)
               else
                 currentHole = genOpening(hole,wid,3)
               end
+            --if chunk hasn't been processed yet
             else
-              --currentHole = genOpening(hole,wid,3)
+              currentHole = genOpening(hole,wid,3)
             end
             table.insert(chunks[x][y],currentHole)
           end
           builder = StaticTCMGrower.staticTCMGrower()
+          --if chunk has only 2 holes it has a 66% chance to be generated as a hallway
           if #chunks[x][y] == 2 and love.math.random(3) > 1 then
-            builder.builder.types = {2,5}
+            builder.builder.types = {2,5} --will first make a full chunk (all walls) then layer a hallway on top of it
+            --hallway parameters
             builder.builder.parameters[2] = {
+              --width of the hallway
               width = chunks[x][y][1].width,
+              --start of the hallway
+              --since there are only 2 openings we can use chunk[x][y][1] and chunk[x][y][2]
               sPos =
                 {x = chunks[x][y][1].x, y = chunks[x][y][1].y},
+              --end of the hallway
               ePos =
                 {x = chunks[x][y][2].x, y = chunks[x][y][2].y}
             }
-
+          --otherwise just make a square walled room, will have more options here later :)
           else
-            builder.builder.types = {1,3}
+            builder.builder.types = {1,3} --will first make an empty room(all floor) then layer a wall around it
             count = 2
+            --layer on the empty chunks
             for h = 1, #chunks[x][y] do
               count = count + 1
-              table.insert(builder.builder.types,4)
+              table.insert(builder.builder.types,4) --empty chunk so that you can exit the room
               builder.builder.parameters[count] = {
                 width = chunks[x][y][h].width,
                 height = chunks[x][y][h].width,

@@ -138,6 +138,8 @@ tube = function(world,cMap,width,height,parameters)
   return cMap
 end
 
+--current options for a generated chunk
+--will add more eventually
 local types = {empty,full,walled,emptychunk,tube}
 
 --builds a chunk from a buildType
