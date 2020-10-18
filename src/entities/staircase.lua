@@ -29,7 +29,7 @@ function staircase(x,y)
         if mapFilter:fit(entity) then
           --remove entities that get wiped on load
           if entity.classification.wipedOnNewFloor then
-            entity = nil
+            world[key] = nil
           end
 
         end

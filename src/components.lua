@@ -193,5 +193,5 @@ function classification(wipe)
   Classification = {
     wipedOnNewFloor = wipe;
   }
-  return
+  return Classification
 end
