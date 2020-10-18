@@ -45,7 +45,7 @@ function maze1(width,height,start)
   maze[start.x][start.y].start = true
   maze = maze1recur(maze,start,{{x = start.x, y = start.y}})
   --#OPTIONAL DEBUG PRINT
-
+  --[[
   for y = 1, #maze[1] do
     line = "okay"
     for x = 1, #maze do
@@ -64,20 +64,18 @@ function maze1(width,height,start)
     end
     print(line)
   end
-
+  --]]
   --debug print end
   return maze
 end
 
 function maze1recur(maze,pos,stack)
   neighbors = neighbors1(maze,pos)
-  print(#neighbors)
   while #neighbors > 0 do
     neighbor = neighbors[love.math.random(#neighbors)]
     table.insert(maze[pos.x][pos.y].holes,{x = neighbor.x, y = neighbor.y})
     pos.x = neighbor.x + pos.x
     pos.y = neighbor.y + pos.y
-    print(pos.x,pos.y)
     maze[pos.x][pos.y].visited = true
     table.insert(maze[pos.x][pos.y].holes,{x = -neighbor.x, y = -neighbor.y})
     neighbors = neighbors1(maze,pos)

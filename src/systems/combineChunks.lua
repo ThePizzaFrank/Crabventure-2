@@ -3,15 +3,18 @@ Filter = require("src.utilities.filter")
 
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 
+Components = require("src.components")
+
 globals = require('src.utilities.globals')
 assets = require('src.assets')
 
-local filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit","id","camera"})
+local filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit","id","camera","genEntities"})
 
 function update(world)
   local ids = getIds(world)
   for id,count in pairs(ids) do
     if count > 1 then
+      local localct =count
       local chunks = {}
       for key,entity in pairs(world) do
         if filter:fit(entity) then
@@ -38,6 +41,7 @@ function update(world)
       resultStcm.id.value = id
       resultStcm.spriteMap = chunks[1].spriteMap
       resultStcm.camera = chunks[1].camera
+      resultStcm.genEntities = chunks[1].genEntities
       table.insert(world,resultStcm)
       ids[id] = false
     end

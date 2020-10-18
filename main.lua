@@ -1,4 +1,8 @@
 module(...,package.seeall)
+
+--we want nearest neighbor when filtering
+love.graphics.setDefaultFilter( "nearest","nearest" )
+
 Filter = require("src.utilities.filter")
 Maze = require("src.utilities.maze")
 --entities
@@ -23,15 +27,15 @@ Debug = require("src.systems.debug")
 ScrollBar = require("src.systems.scrollBar")
 CombineChunks = require("src.systems.combineChunks")
 DebugExpand = require("src.systems.debugExpand")
+GenerateEntities = require("src.systems.generateEntities")
 --Some global vars
 globals = require('src.utilities.globals')
-
-
 
 UpdateSystems = {
   BuildMap,
   BuildChunk,
   CombineChunks,
+  GenerateEntities,
   UpdateBatch,
   Collision
 }
@@ -58,6 +62,7 @@ ScrollSystems = {
 }
 
 function love.load(arg)
+
   world = {}
   --global components
   camera = Components.camera(0,0)
@@ -65,12 +70,14 @@ function love.load(arg)
 
   debugScroller = {
     _type = "Debug Scroller",
+    classification = Components.classification(false),
     scrollData = Components.scrollData(nil,0),
     debugData = Components.debugData()
   }
 
   blob = {
     _type = "Player",
+    classification = Components.classification(false),
     player = Components.player(),
     sprite = Components.sprite("enemy"),
     position = Components.position(5,5),
@@ -81,7 +88,7 @@ function love.load(arg)
     collider = Components.collider(globals.CollisionEnum.Player),
     cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2)
   }
-  blob.collider.colfunc = function(e1,e2)
+  blob.collider.colfunc = function(e1,e2,world)
     movement = Filter.filter({"movement"})
     if movement:fit(e1) then
       e1.movement = nil
@@ -109,7 +116,6 @@ function love.draw()
   for _,v in pairs(DrawSystems) do
     v.update(world)
   end
-  love.graphics.print(globals.turns,0,0)
 end
 
 function love.update(dt)

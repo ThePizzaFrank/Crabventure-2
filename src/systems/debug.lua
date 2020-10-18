@@ -1,18 +1,23 @@
 module(...,package.seeall)
 
 Filter = require("src.utilities.filter")
+globals = require("src.utilities.globals")
 
 local filter = Filter.filter({"scrollData","debugData"})
 
 function update(world)
   i = 0
   sp = 0
-  ln = 0
+  ln = 1
+  fps = 0
   expanded = false
   for _,entity in ipairs(world) do
     if(filter:fit(entity)) then
       sp = entity.scrollData.scrollPosition
       expanded = entity.debugData.expanded
+      fps = love.timer.getFPS( )
+      love.graphics.print(globals.turns,0,0)
+      love.graphics.print(fps,0,13)
     end
   end
   for _,entity in ipairs(world) do

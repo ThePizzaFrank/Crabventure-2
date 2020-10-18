@@ -4,7 +4,7 @@ Maze = require("src.utilities.maze")
 Components = require("src.components")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 
-local filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","id"})
+local filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","id","genEntities"})
 
 function update(world)
   for _,entity in pairs(world) do
@@ -89,6 +89,7 @@ function update(world)
           builder.spriteMap = entity.spriteMap
           builder.camera = entity.camera
           builder.id = Components.id(entity.id.value)
+          builder.genEntities = entity.genEntities
           table.insert(world,builder)
         end
       end

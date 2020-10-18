@@ -13,7 +13,7 @@ function collider(type)
     type = type,
     active = true,
     id = globals.currentCollider,
-    colfunc = function(e1,e2) end
+    colfunc = function(e1,e2,world) end
   }
   globals.currentCollider = globals.currentCollider + 1
   return Collider
@@ -172,4 +172,26 @@ function id(val)
     value = val
   }
   return Id
+end
+
+function mapMetaData()
+  MapMetaData = {
+    floor = floor
+  }
+  return MapMetaData
+end
+
+function genEntities()
+  GenEntities = {
+    generated = true
+  }
+  return GenEntities;
+end
+
+function classification(wipe)
+  --used for determining some stuff like whether or not it gets removed when the next floor is generated
+  Classification = {
+    wipedOnNewFloor = wipe;
+  }
+  return
 end

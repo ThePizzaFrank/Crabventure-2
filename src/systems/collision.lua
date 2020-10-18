@@ -16,7 +16,7 @@ function update(world)
         future = futurePosition(entity)
         if(future.x == e2.position.x and future.y == e2.position.y and entity.collider.id ~= e2.collider.id) then
           nullify = true
-          collision(entity,e2)
+          collision(entity,e2,world)
         end
       end
       --find all static colliders
@@ -25,7 +25,7 @@ function update(world)
       for _,static in pairs(activeStaticColliders) do
         future = futurePosition(entity)
         if(checkStatic(future,static.collisionMap.map,static.position)) then
-          staticCollision(entity,static)
+          staticCollision(entity,static,world)
         end
       end
     end
@@ -46,9 +46,9 @@ function futurePosition(entity)
   return future
 end
 
-function collision(e1,e2)
-  e1.collider:colfunc(e1,e2)
-  e2.collider:colfunc(e2,e1)
+function collision(e1,e2,world)
+  e1.collider.colfunc(e1,e2,world)
+  e2.collider.colfunc(e2,e1,world)
 end
 
 function checkStatic(future,cMap, pos)
@@ -59,6 +59,6 @@ function checkStatic(future,cMap, pos)
   end
 end
 
-function staticCollision(e1,e2)
+function staticCollision(e1,e2,world)
   e1.movement = nil
 end

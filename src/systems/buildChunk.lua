@@ -6,7 +6,7 @@ StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 globals = require("src.utilities.globals")
 
 --usually looking for staticTCMGrower, Ideally we'd like to combine the chunks before finalizing them
-local filter = Filter.filter({"builder","spriteMap","position","id"})
+local filter = Filter.filter({"builder","spriteMap","position","id","genEntities"})
 
 
 empty = function(world,cMap,width,height,parameters)
@@ -168,6 +168,7 @@ function update(world)
       entity.dirtyBit = dbit;
       entity.batchMap = Components.batchMap()
       entity.builder = nil
+      entity.classification = Components.classification(true)
       entity._type = "StaticTexturedCollisionMap"
     end
   end
