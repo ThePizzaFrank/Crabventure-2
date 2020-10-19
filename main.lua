@@ -79,7 +79,7 @@ function love.load(arg)
     _type = "Player",
     classification = Components.classification(false),
     player = Components.player(),
-    sprite = Components.sprite("enemy"),
+    sprite = Components.sprite("crab"),
     position = Components.position(5,5),
     camera = camera,
     action = Components.action(0),
@@ -122,9 +122,8 @@ function love.update(dt)
   for _,v in ipairs(UpdateSystems) do
     v.update(world)
   end
-  for x = 0, PlayerAction.update(world)-1 do
+  if PlayerAction.update(world) > 0 then
     takeTurn()
-    globals.turns = globals.turns + 1
   end
 end
 
