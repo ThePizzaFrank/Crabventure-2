@@ -85,6 +85,7 @@ function love.load(arg)
     action = Components.action(0),
     stats = Components.stats(6),
     directionControls = Components.directionControls("w","s","a","d"),
+    menuControls = Components.menuControls("","escape"),
     collider = Components.collider(globals.CollisionEnum.Player),
     cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2)
   }

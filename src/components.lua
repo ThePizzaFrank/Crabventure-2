@@ -95,6 +95,14 @@ function directionControls(up,down,left,right)
   return DirectionControls
 end
 
+function menuControls(menu,quit)
+  MenuControls = {
+    menu = menu,
+    quit = quit
+  }
+  return MenuControls
+end
+
 function position(x,y)
   Position = {
     x = x,

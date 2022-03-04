@@ -3,7 +3,7 @@ module(...,package.seeall)
 Components = require("src.components")
 Filter = require("src.utilities.filter")
 
-local filter = Filter.filter({"position","directionControls","action","stats"})
+local filter = Filter.filter({"position","directionControls","menuControls","action","stats"})
 
 function update(world,key)
   for _,entity in pairs(world) do
@@ -14,6 +14,13 @@ function update(world,key)
 end
 
 function handleInput(entity,key)
+  for k,inputOption in pairs(entity.menuControls) do
+    if key == inputOption then
+      if k == 'quit' then
+        love.window.close()
+      end
+    end
+  end
   for k,inputOption in pairs(entity.directionControls) do
     if key == inputOption then
       if k == 'up' and passive(entity) then
