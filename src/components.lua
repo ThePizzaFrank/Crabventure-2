@@ -28,7 +28,7 @@ end
 
 function sprite(key)
   Sprite = {
-    key = key
+    key = key,
   }
   return Sprite
 end
@@ -202,4 +202,60 @@ function classification(wipe)
     wipedOnNewFloor = wipe;
   }
   return Classification
+end
+
+function visible(visible)
+  Visible = {
+    visible = visible
+  }
+  return Visible
+end
+
+function toggleVisibleEvent(event)
+  ToggleVisibleEvent = {
+    event = event
+  }
+  return ToggleVisibleEvent
+end
+
+function window(width,height)
+  Window = {
+    width = width,
+    height = height
+  }
+  return Window
+end
+
+function mouseCollider(width,height)
+  MouseCollider = {
+    width = width,
+    height = height,
+  }
+  return MouseCollider
+end
+
+function hover()
+  Hover = {
+    hover = false
+  }
+  return Hover
+end
+
+--emits an event depending on certain situations
+--trigger is determined by other components attached to the entity
+function eventEmitter(event)
+  EventEmitter = {
+    event = event
+  }
+  return EventEmitter
+end
+
+--depending on how its named can perform different functions based on systems
+--ex. hoverSwap will swap sprite to alt when hovered
+function spriteSwap(default,alt)
+  SpriteSwap = {
+    default = default,
+    alt = alt
+  }
+  return SpriteSwap
 end

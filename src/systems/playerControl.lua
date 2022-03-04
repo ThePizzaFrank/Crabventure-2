@@ -14,10 +14,15 @@ function update(world,key)
 end
 
 function handleInput(entity,key)
+  --temp to test events
+  if key == 'i' then
+    love.event.push("gameEvent","inventoryClose")
+  end
+  --end temp
   for k,inputOption in pairs(entity.gameControls) do
     if key == inputOption then
       if k == 'quit' then
-        love.window.close()
+        love.event.push("quit")
       end
     end
   end

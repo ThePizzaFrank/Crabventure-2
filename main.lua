@@ -13,6 +13,7 @@ Inventory = require("src.entities.inventory")
 --component
 Components = require("src.components")
 --systems
+OverlayDraw = require("src.systems.overlayDraw")
 StaticDraw = require("src.systems.staticDraw")
 MultiDraw = require("src.systems.multiDraw")
 WindowDraw = require("src.systems.windowDraw")
@@ -30,6 +31,7 @@ ScrollBar = require("src.systems.scrollBar")
 CombineChunks = require("src.systems.combineChunks")
 DebugExpand = require("src.systems.debugExpand")
 GenerateEntities = require("src.systems.generateEntities")
+ButtonClick = require("src.systems.buttonClick")
 --event systems
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 --Some global vars
@@ -58,12 +60,17 @@ DrawSystems = {
   MultiDraw,
   StaticDraw,
   WindowDraw,
+  OverlayDraw,
   Debug
 }
 
 KeyUpSystems = {
   PlayerControl,
   DebugExpand
+}
+
+MouseClickSystems = {
+  ButtonClick
 }
 
 ScrollSystems = {
@@ -119,7 +126,8 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
-  inventory = Inventory.inventory();
+  inventory = Inventory.inventory()
+  inventoryCloseButton = Inventory.inventoryCloseButton()
 
   mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1},0)
   mGen.camera = camera
@@ -128,6 +136,7 @@ function love.load(arg)
   table.insert(world,blob)
   table.insert(world,mGen)
   table.insert(world,debugScroller)
+  table.insert(world,inventoryCloseButton)
   table.insert(world,inventory)
   --table.insert(world,builder)
 end
@@ -177,5 +186,13 @@ end
 function love.wheelmoved(x, y)
   for _,v in ipairs(ScrollSystems) do
     v.update(world,y)
+  end
+end
+
+function love.mousereleased(x, y, button, isTouch)
+  if button == 1 then
+    for _,v in ipairs(MouseClickSystems) do
+      v.update(world,x,y,button)
+    end
   end
 end
