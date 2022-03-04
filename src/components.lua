@@ -95,12 +95,12 @@ function directionControls(up,down,left,right)
   return DirectionControls
 end
 
-function menuControls(menu,quit)
-  MenuControls = {
-    menu = menu,
+--currently only used for quitting game
+function gameControls(quit)
+  GameControls = {
     quit = quit
   }
-  return MenuControls
+  return GameControls
 end
 
 function position(x,y)
