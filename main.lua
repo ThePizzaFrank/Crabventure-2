@@ -9,11 +9,13 @@ Maze = require("src.utilities.maze")
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 MapGenerator = require("src.entities.mapGenerator")
+Inventory = require("src.entities.inventory")
 --component
 Components = require("src.components")
 --systems
 StaticDraw = require("src.systems.staticDraw")
 MultiDraw = require("src.systems.multiDraw")
+WindowDraw = require("src.systems.windowDraw")
 UpdateBatch = require("src.systems.updateBatch")
 PlayerControl = require("src.systems.playerControl")
 PlayerAction = require("src.systems.playerAction")
@@ -28,6 +30,8 @@ ScrollBar = require("src.systems.scrollBar")
 CombineChunks = require("src.systems.combineChunks")
 DebugExpand = require("src.systems.debugExpand")
 GenerateEntities = require("src.systems.generateEntities")
+--event systems
+ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 --Some global vars
 globals = require('src.utilities.globals')
 
@@ -41,7 +45,7 @@ UpdateSystems = {
 }
 
 EventSystems = {
-
+  ToggleVisibleEvent
 }
 
 TurnSystems = {
@@ -53,6 +57,7 @@ DrawSystems = {
   CameraFollow,
   MultiDraw,
   StaticDraw,
+  WindowDraw,
   Debug
 }
 
@@ -68,6 +73,14 @@ ScrollSystems = {
 function love.load(arg)
 
   world = {}
+
+  eventHandler = function (event)
+    for _,v in ipairs(EventSystems) do
+      v.update(world,event)
+    end
+  end
+
+  love.handlers["gameEvent"] = eventHandler
   --global components
   camera = Components.camera(0,0)
   gameInfo = Components.gameInfo
@@ -106,6 +119,7 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
+  inventory = Inventory.inventory();
 
   mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1},0)
   mGen.camera = camera
@@ -114,6 +128,7 @@ function love.load(arg)
   table.insert(world,blob)
   table.insert(world,mGen)
   table.insert(world,debugScroller)
+  table.insert(world,inventory)
   --table.insert(world,builder)
 end
 
@@ -127,6 +142,7 @@ function love.update(dt)
   for _,v in ipairs(UpdateSystems) do
     v.update(world)
   end
+  --[[
   --checks if there are any events
   hasEvents = false
   for n, a, b, c, d, e, f in love.event.poll() do
@@ -140,6 +156,7 @@ function love.update(dt)
       v.update(world,love.event.poll())
     end
   end
+  ]]
   if PlayerAction.update(world) > 0 then
     takeTurn()
   end
