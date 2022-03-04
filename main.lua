@@ -40,6 +40,10 @@ UpdateSystems = {
   Collision
 }
 
+EventSystems = {
+
+}
+
 TurnSystems = {
   ActionStep,
   Movement
@@ -122,6 +126,12 @@ end
 function love.update(dt)
   for _,v in ipairs(UpdateSystems) do
     v.update(world)
+  end
+  events = love.event.poll()
+  if #events > 0 then
+    for _,v in ipairs(EventSystems) do
+      v.update(world,events)
+    end
   end
   if PlayerAction.update(world) > 0 then
     takeTurn()
