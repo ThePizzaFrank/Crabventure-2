@@ -127,10 +127,17 @@ function love.update(dt)
   for _,v in ipairs(UpdateSystems) do
     v.update(world)
   end
-  events = love.event.poll()
-  if #events > 0 then
+  --checks if there are any events
+  hasEvents = false
+  for n, a, b, c, d, e, f in love.event.poll() do
+    hasEvents = true
+    break
+  end
+  --if there are no events then we don't have to run through all the event systems
+  --and improve performance!
+  if hasEvents then
     for _,v in ipairs(EventSystems) do
-      v.update(world,events)
+      v.update(world,love.event.poll())
     end
   end
   if PlayerAction.update(world) > 0 then
