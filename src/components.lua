@@ -13,7 +13,6 @@ function collider(type)
     type = type,
     active = true,
     id = globals.currentCollider,
-    colfunc = function(e1,e2,world) end
   }
   globals.currentCollider = globals.currentCollider + 1
   return Collider
@@ -258,4 +257,12 @@ function spriteSwap(default,alt)
     alt = alt
   }
   return SpriteSwap
+end
+
+function collision(colliderType,colliderId)
+  Collision = {
+    colliderType = colliderType,
+    colliderId = colliderId
+  }
+  return Collision
 end

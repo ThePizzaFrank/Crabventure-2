@@ -32,6 +32,8 @@ CombineChunks = require("src.systems.combineChunks")
 DebugExpand = require("src.systems.debugExpand")
 GenerateEntities = require("src.systems.generateEntities")
 ButtonClick = require("src.systems.buttonClick")
+StairCollision = require("src.systems.stairCollision")
+RemoveCollisions = require("src.systems.removeCollisions")
 --event systems
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 --Some global vars
@@ -43,7 +45,10 @@ UpdateSystems = {
   CombineChunks,
   GenerateEntities,
   UpdateBatch,
-  Collision
+  Collision,
+  --Collisions
+  StairCollision,
+  RemoveCollisions,
 }
 
 EventSystems = {
@@ -81,9 +86,9 @@ function love.load(arg)
 
   world = {}
 
-  eventHandler = function (event)
+  eventHandler = function (event,arg1,arg2)
     for _,v in ipairs(EventSystems) do
-      v.update(world,event)
+      v.update(world,event,arg1,arg2)
     end
   end
 

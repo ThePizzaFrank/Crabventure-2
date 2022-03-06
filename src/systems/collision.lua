@@ -1,6 +1,7 @@
 module(...,package.seeall)
 
 Filter = require("src.utilities.filter")
+Components = require("src.components")
 globals = require('src.utilities.globals')
 
 local filter = Filter.filter({"position","collider","movement"})
@@ -47,8 +48,8 @@ function futurePosition(entity)
 end
 
 function collision(e1,e2,world)
-  e1.collider.colfunc(e1,e2,world)
-  e2.collider.colfunc(e2,e1,world)
+  e1.collision = Components.collision(e2.collider.type,e2.collider.id)
+  e2.collision = Components.collision(e1.collider.type,e1.collider.id)
 end
 
 function checkStatic(future,cMap, pos)
