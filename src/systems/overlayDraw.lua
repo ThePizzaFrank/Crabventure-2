@@ -4,19 +4,15 @@ Filter = require("src.utilities.filter")
 assets = require('src.assets')
 globals = require('src.utilities.globals')
 
-local filter = Filter.filter({"sprite","screenPosition"})
+filter = Filter.filter({"sprite","screenPosition"})
 
-function update(world)
-  for _,entity in pairs(world) do
-    if filter:fit(entity) then
-      if not(entity.visible) or entity.visible.visible then
-        draw(entity)
-      end
-    end
+function update(entity)
+  if not(entity.visible) or entity.visible.visible then
+    draw(entity)
   end
 end
 
-function draw(entity)
+local function draw(entity)
   offsetX = 0
   offsetY = 0
   local x = globals.scale*(entity.screenPosition.x)

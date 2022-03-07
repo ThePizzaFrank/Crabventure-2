@@ -4,7 +4,7 @@ Filter = require("src.utilities.filter")
 Components = require("src.components")
 globals = require('src.utilities.globals')
 
-local filter = Filter.filter({"position","collider","movement"})
+filter = Filter.filter({"position","collider","movement"})
 
 function update(world)
   for _,entity in pairs(world) do

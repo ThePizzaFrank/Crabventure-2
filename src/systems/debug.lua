@@ -3,7 +3,7 @@ module(...,package.seeall)
 Filter = require("src.utilities.filter")
 globals = require("src.utilities.globals")
 
-local filter = Filter.filter({"scrollData","debugData"})
+filter = Filter.filter({"scrollData","debugData"})
 
 function update(world)
   i = 0

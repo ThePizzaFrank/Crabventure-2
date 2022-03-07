@@ -8,7 +8,7 @@ Components = require("src.components")
 globals = require('src.utilities.globals')
 assets = require('src.assets')
 
-local filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit","id","camera","genEntities"})
+filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit","id","camera","genEntities"})
 
 function update(world)
   local ids = getIds(world)

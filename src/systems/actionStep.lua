@@ -1,7 +1,7 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
 
-local filter = Filter.filter({"action"})
+filter = Filter.filter({"action"})
 
 function update(world)
   for _,entity in pairs(world) do

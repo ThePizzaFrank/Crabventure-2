@@ -8,7 +8,7 @@ globals = require('src.utilities.globals')
 assets = require('src.assets')
 
 
-local filter = Filter.filter({"collisionMap","genEntities","camera"})
+filter = Filter.filter({"collisionMap","genEntities","camera"})
 
 function update(world)
   unionMap = Components.collisionMap();

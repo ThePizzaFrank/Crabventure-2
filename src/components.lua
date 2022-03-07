@@ -1,6 +1,6 @@
 module(...,package.seeall)
 
-globals = require('src.utilities.globals')
+local globals = require('src.utilities.globals')
 
 function player()
   return {}

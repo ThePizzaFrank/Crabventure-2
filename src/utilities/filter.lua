@@ -1,7 +1,8 @@
 module(...,package.seeall)
-function filter(filterList)
+function filter(filterList,optional)
   local Filter = {
     filters = filterList,
+    optional = optionals,
   }
   --checks if an entity has a set of components
   function Filter:fit(entity)

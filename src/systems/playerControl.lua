@@ -1,16 +1,14 @@
+--this one has updates needed in the entity
 module(...,package.seeall)
 
 Components = require("src.components")
 Filter = require("src.utilities.filter")
 
-local filter = Filter.filter({"position","directionControls","gameControls","action","stats"})
 
-function update(world,key)
-  for _,entity in pairs(world) do
-    if filter:fit(entity) then
-      handleInput(entity,key)
-    end
-  end
+filter = Filter.filter({"position","directionControls","gameControls","action","stats"})
+
+function update(entity,key)
+  handleInput(entity,key)
 end
 
 function handleInput(entity,key)

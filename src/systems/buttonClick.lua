@@ -1,7 +1,7 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
 
-local filter = Filter.filter({"mouseCollider","eventEmitter","screenPosition"})
+filter = Filter.filter({"mouseCollider","eventEmitter","screenPosition"})
 
 function update(world,x,y,button)
   for _,entity in pairs(world) do

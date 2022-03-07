@@ -3,7 +3,7 @@ Filter = require("src.utilities.filter")
 
 globals = require('src.utilities.globals')
 
-local filter = Filter.filter({"position","camera","cameraTarget"})
+filter = Filter.filter({"position","camera","cameraTarget"})
 
 function update(world)
   for _,entity in pairs(world) do
