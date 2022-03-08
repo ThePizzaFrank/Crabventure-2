@@ -1,5 +1,6 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
+Entities = require("src.utilities.entityComponentSystems").Entities
 
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 
@@ -10,8 +11,9 @@ assets = require('src.assets')
 
 filter = Filter.filter({"collisionMap","spriteMap","batchMap","dirtyBit","id","camera","genEntities"})
 
-function update(world)
-  local ids = getIds(world)
+--this is gonna be super inefficient with the new ECS framework I made but it only fully runs once per stage so idc
+function update(_entity)
+  local ids = getIds(Entities)
   for id,count in pairs(ids) do
     if count > 1 then
       local localct =count
@@ -52,11 +54,11 @@ function getIds(world)
   ids = {}
   for key,entity in pairs(world) do
     if filter:fit(entity) then
-      if entity.id.value ~= -1 then
-        if ids[entity.id.value] == nil then
-          ids[entity.id.value] = 0
+      if entity._id.value ~= -1 then
+        if ids[entity._id.value] == nil then
+          ids[entity._id.value] = 0
         end
-        ids[entity.id.value] = ids[entity.id.value] + 1
+        ids[entity._id.value] = ids[entity._id.value] + 1
       end
     end
   end

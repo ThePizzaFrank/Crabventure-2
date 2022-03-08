@@ -5,6 +5,7 @@ love.graphics.setDefaultFilter( "nearest","nearest" )
 
 Filter = require("src.utilities.filter")
 ECS = require("src.utilities.entityComponentSystems")
+SystemLoader = require("src.utilities.systemLoader")
 Maze = require("src.utilities.maze")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
@@ -16,14 +17,19 @@ Components = require("src.components")
 --Some global vars
 globals = require('src.utilities.globals')
 
+Debug = require("src.systems.debug")
+
 Entities = ECS.Entities
 Systems = ECS.Systems
+
+
 
 function love.load(arg)
 
   world = {}
-  ECS.initializeSystems()
+  SystemLoader.initializeSystems()
   eventHandler = function (event,arg1,arg2)
+    Systems:run("event",event,arg1,arg2)
     --for _,v in ipairs(EventSystems) do
       --v.update(world,event,arg1,arg2)
     --end
@@ -80,46 +86,54 @@ function love.load(arg)
   table.insert(world,debugScroller)
   table.insert(world,inventoryCloseButton)
   table.insert(world,inventory)
-  blobby = Entities:add(blob)
-  blobby.position.x = 20
-  blobby = Entities:get(blobby._id)
+  Entities:add(blob)
+  Entities:add(mGen)
+  Entities:add(debugScroller)
+  Entities:add(inventoryCloseButton)
+  Entities:add(inventory)
+  --Entities:add()
   --table.insert(world,builder)
 end
 
 function love.draw()
-  --for _,v in pairs(DrawSystems) do
-    --v.update(world)
-  --end
+  Systems:run("draw")
 end
 
 function love.update(dt)
+  --Systems:run("update")
   --for _,v in ipairs(UpdateSystems) do
     --v.update(world)
   --end
-  --if PlayerAction.update(world) > 0 then
-    --takeTurn()
-  --end
+  if Systems:run("special" ) > 0 then
+    takeTurn()
+  end
 end
 
 function takeTurn()
+  Systems:run("turn")
   --for _,v in ipairs(TurnSystems) do
     --v.update(world)
   --end
 end
 
 function love.keyreleased(key)
+  Systems:run("keyUp",key)
     --for _,v in ipairs(KeyUpSystems) do
       --v.update(world,key)
     --end
 end
 
 function love.wheelmoved(x, y)
+  Systems:run("scroll",y)
   --for _,v in ipairs(ScrollSystems) do
     --v.update(world,y)
   --end
 end
 
 function love.mousereleased(x, y, button, isTouch)
+  if button == 1 then
+    Systems:run("click",x,y,button)
+  end
   --if button == 1 then
     --for _,v in ipairs(MouseClickSystems) do
       --v.update(world,x,y,button)

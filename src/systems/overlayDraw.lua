@@ -12,7 +12,7 @@ function update(entity)
   end
 end
 
-local function draw(entity)
+function draw(entity)
   offsetX = 0
   offsetY = 0
   local x = globals.scale*(entity.screenPosition.x)

@@ -14,7 +14,7 @@ function update(entity)
 end
 
 
-local function draw(entity)
+function draw(entity)
   offsetX = 0
   offsetY = 0
   if entity.camera then

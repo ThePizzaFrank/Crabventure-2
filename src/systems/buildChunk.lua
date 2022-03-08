@@ -143,33 +143,29 @@ end
 local types = {empty,full,walled,emptychunk,tube}
 
 --builds a chunk from a buildType
-function update(world)
-  for _,entity in pairs(world) do
-    if filter:fit(entity) then
-      local buildType = entity.builder.types
-      local buildParameters = entity.builder.parameters
-      local width = entity.builder.width
-      local height = entity.builder.height
-      dbit = Components.dirtyBit(true)
-      cMap = {}
+function update(entity)
+  local buildType = entity.builder.types
+  local buildParameters = entity.builder.parameters
+  local width = entity.builder.width
+  local height = entity.builder.height
+  dbit = Components.dirtyBit(true)
+  cMap = {}
 
-      for k,v in ipairs(buildType) do
-        local bp = buildParameters[k];
-        cMap = types[v](world,cMap,width,height,bp);
-      end
-      entity.collisionMap = Components.collisionMap()
-      entity.collisionMap.map = cMap;
-      i = 1
-      for x,v in ipairs(cMap) do
-        for y,b in ipairs(cMap[x]) do
-          table.insert(dbit.target,{key = cMap[x][y], x = x*globals.tileSize, y = y*globals.tileSize})
-        end
-      end
-      entity.dirtyBit = dbit;
-      entity.batchMap = Components.batchMap()
-      entity.builder = nil
-      entity.classification = Components.classification(true)
-      entity._type = "StaticTexturedCollisionMap"
+  for k,v in ipairs(buildType) do
+    local bp = buildParameters[k];
+    cMap = types[v](world,cMap,width,height,bp);
+  end
+  entity.collisionMap = Components.collisionMap()
+  entity.collisionMap.map = cMap;
+  i = 1
+  for x,v in ipairs(cMap) do
+    for y,b in ipairs(cMap[x]) do
+      table.insert(dbit.target,{key = cMap[x][y], x = x*globals.tileSize, y = y*globals.tileSize})
     end
   end
+  entity.dirtyBit = dbit;
+  entity.batchMap = Components.batchMap()
+  entity.builder = nil
+  entity.classification = Components.classification(true)
+  entity._type = "StaticTexturedCollisionMap"
 end
