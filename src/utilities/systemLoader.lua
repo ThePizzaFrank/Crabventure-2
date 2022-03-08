@@ -65,4 +65,8 @@ function initializeSystems()
   --special
   type = "special"
   Systems:new(type,PlayerAction,true,false)
+  --turns
+  type = "turn"
+  Systems:new(type,ActionStep,true,false)
+  Systems:new(type,Movement,true,false)
 end

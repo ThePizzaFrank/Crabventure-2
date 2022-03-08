@@ -81,11 +81,6 @@ function love.load(arg)
   mGen.camera = camera
   mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
   mGen.spriteMap.mapping[0] = {"floor_1"}
-  table.insert(world,blob)
-  table.insert(world,mGen)
-  table.insert(world,debugScroller)
-  table.insert(world,inventoryCloseButton)
-  table.insert(world,inventory)
   Entities:add(blob)
   Entities:add(mGen)
   Entities:add(debugScroller)
@@ -100,7 +95,7 @@ function love.draw()
 end
 
 function love.update(dt)
-  --Systems:run("update")
+  Systems:run("update")
   --for _,v in ipairs(UpdateSystems) do
     --v.update(world)
   --end
