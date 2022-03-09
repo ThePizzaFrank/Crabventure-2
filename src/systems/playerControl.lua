@@ -3,7 +3,7 @@ module(...,package.seeall)
 
 Components = require("src.components")
 Filter = require("src.utilities.filter")
-
+Entities = require("src.utilities.entityComponentSystems").Entities
 
 filter = Filter.filter({"position","directionControls","gameControls","action","stats"})
 
@@ -28,16 +28,16 @@ function handleInput(entity,key)
     if key == inputOption then
       if k == 'up' and passive(entity) then
         entity.action.turns = entity.stats.movement
-        entity.movement = Components.movement(0,-1)
+        Entities:addComponent(entity._id,"movement",Components.movement(0,-1))
       elseif k == 'down' and passive(entity) then
         entity.action.turns = entity.stats.movement
-        entity.movement = Components.movement(0,1)
+        Entities:addComponent(entity._id,"movement",Components.movement(0,1))
       elseif k == 'left' and passive(entity) then
         entity.action.turns = entity.stats.movement
-        entity.movement = Components.movement(-1,0)
+        Entities:addComponent(entity._id,"movement",Components.movement(-1,0))
       elseif k == 'right' and passive(entity) then
         entity.action.turns = entity.stats.movement
-        entity.movement = Components.movement(1,0)
+        Entities:addComponent(entity._id,"movement",Components.movement(1,0))
       end
     end
   end

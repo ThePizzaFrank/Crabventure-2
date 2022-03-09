@@ -93,8 +93,8 @@ function update(entity)
       Entities:add(builder)
     end
   end
-  entity.chunks = nil
-  entity.chunkData = nil
+  Entities:removeComponent(entity._id,"chunks")
+  Entities:removeComponent(entity._id,"chunkData")
 end
 
 function genOpening(hole,cwid,hwid)

@@ -8,7 +8,7 @@ globals = require('src.utilities.globals')
 
 filter = Filter.filter({"position","collider","movement"})
 
-function update(enitity)
+function update(entity)
   local nullify = false
   --find all dynamic colliders
   searchFilterDynamic = Filter.filter({"position","collider"})
@@ -59,5 +59,5 @@ function checkStatic(future,cMap, pos)
 end
 
 function staticCollision(e1,e2)
-  e1.movement = nil
+  Entities:removeComponent(e1._id,"movement")
 end

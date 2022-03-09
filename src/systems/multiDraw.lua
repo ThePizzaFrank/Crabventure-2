@@ -13,7 +13,7 @@ function update(entity)
   end
 end
 
-local function draw(entity,batch)
+function draw(entity,batch)
   local x = globals.tileSize*globals.scale*(entity.position.x)-entity.camera.x
   local y = globals.tileSize*globals.scale*(entity.position.y)-entity.camera.y
   love.graphics.draw(

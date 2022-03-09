@@ -126,6 +126,9 @@ Entities = {
     return self.components[componentName][entityId]
   end,
   addComponent = function (self,entityId,componentName,component)
+    if not(self.components[componentName]) then
+      self.components[componentName] = {}
+    end
     self.components[componentName][entityId] = component
   end,
   removeComponent = function (self,entityId,componentName)
@@ -140,7 +143,7 @@ Systems = {
     local args = {...}
     local runSystems = self.systems[type]
     for _,system in pairs(runSystems) do
-      for k,entity in pairs(Entities:filterAll(system.filter,false,system.requireAll)) do
+      for k,entity in pairs(Entities:filterAll(system.filter,false,not(system.requireAll))) do
         local update = system.update(entity,args[1],args[2],args[3],args[4])
         if(type == "special") then
           return update

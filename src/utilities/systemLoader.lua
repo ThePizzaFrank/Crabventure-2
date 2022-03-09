@@ -30,9 +30,9 @@ function initializeSystems()
   --update Systems
   local type = "update"
   Systems:new(type,BuildMap,true,false)
-  Systems:new(type,BuildChunk,true,false)
+  Systems:new(type,BuildChunk,true,true)
   --Systems:new(type,CombineChunks,true,true)
-  Systems:new(type,GenerateEntities,true,false)
+  --Systems:new(type,GenerateEntities,true,false)
   Systems:new(type,UpdateBatch,true,false)
   Systems:new(type,Collision,true,false)
   --collisions
