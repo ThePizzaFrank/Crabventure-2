@@ -12,8 +12,7 @@ function button(x,y,width,height,onClick,sprite,spriteHover,spritePressed,name)
     eventEmitter = Components.eventEmitter(onClick),
     screenPosition = Components.position(x,y),
     sprite = Components.sprite(sprite),
-    hoverSwap = Components.spriteSwap(sprite,spriteHover),
-    pressSwap = Components.spriteSwap(sprite,spritePressed),
+    spriteSwap = Components.spriteSwap(sprite,spriteHover),
   }
   return Button
 end
