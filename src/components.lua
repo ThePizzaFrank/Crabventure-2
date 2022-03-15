@@ -95,10 +95,10 @@ function directionControls(up,down,left,right)
   return DirectionControls
 end
 
---currently only used for quitting game
-function gameControls(quit)
+function gameControls(quit,interact)
   local GameControls = {
-    quit = quit
+    quit = quit,
+    interact = interact
   }
   return GameControls
 end
@@ -272,4 +272,11 @@ function collision(colliderType,colliderId,colliderName,entityId)
     entityId = entityId,
   }
   return Collision
+end
+
+function inventory()
+  local Inventory = {
+    items = {}
+  }
+  return Inventory
 end

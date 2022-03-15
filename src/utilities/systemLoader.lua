@@ -27,6 +27,8 @@ RemoveCollisions = require("src.systems.removeCollisions")
 --event systems
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 ResetWorld = require("src.systems.eventSystems.resetWorld")
+Interact = require("src.systems.eventSystems.interact")
+OpenChest = require("src.systems.eventSystems.openChest")
 
 function initializeSystems()
   --update Systems
@@ -52,6 +54,8 @@ function initializeSystems()
   type = "event"
   Systems:new(type,ToggleVisibleEvent,true,false)
   Systems:new(type,ResetWorld,true,false)
+  Systems:new(type,Interact,true,false)
+  Systems:new(type,OpenChest,true,false)
   --turn systems
   Systems:new(type,ActionStep,true,false)
   Systems:new(type,Movement,true,false)

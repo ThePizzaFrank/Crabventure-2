@@ -13,6 +13,7 @@ StaticTCMGrower = require("src.entities.staticTCMGrower")
 MapGenerator = require("src.entities.mapGenerator")
 Inventory = require("src.entities.inventory")
 Staircase = require("src.entities.staircase")
+Chest = require("src.entities.chest")
 --component
 Components = require("src.components")
 --Some global vars
@@ -58,7 +59,7 @@ function love.load(arg)
     action = Components.action(0),
     stats = Components.stats(6),
     directionControls = Components.directionControls("w","s","a","d"),
-    gameControls = Components.gameControls("escape"),
+    gameControls = Components.gameControls("escape","e"),
     collider = Components.collider(globals.CollisionEnum.Player),
     cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2)
   }
@@ -83,7 +84,9 @@ function love.load(arg)
   mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
   mGen.spriteMap.mapping[0] = {"floor_1"}
   stair = Staircase.staircase()
+  chest = Chest.chest()
   table.insert(mGen.mapData.requiredEntities,stair)
+  table.insert(mGen.mapData.requiredEntities,chest)
   Entities:add(blob)
   Entities:add(mGen)
   Entities:add(debugScroller)

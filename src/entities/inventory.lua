@@ -16,6 +16,7 @@ function inventory()
     toggleVisibleEvent = Components.toggleVisibleEvent("inventoryClose"),
     window = Components.window(100,100),
     screenPosition = Components.position(200,200),
+    inventory = Components.inventory(),
   }
   return Inventory
 end

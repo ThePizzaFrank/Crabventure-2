@@ -9,6 +9,7 @@ images = {
   wall_2 = love.graphics.newImage(defaultPath .. "wall_2.png"),
   floor_1 = love.graphics.newImage(defaultPath .. "floor_1.png"),
   stairs = love.graphics.newImage(defaultPath .. "stairs.png"),
+  chest = love.graphics.newImage(defaultPath .. "chest.png"),
   crab = love.graphics.newImage(defaultPath .. "crab.png"),
   close_button = love.graphics.newImage(buttonPath .. "close_button.png"),
   close_button_hover = love.graphics.newImage(buttonPath .. "close_button_hover.png"),

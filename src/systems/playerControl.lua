@@ -21,6 +21,8 @@ function handleInput(entity,key)
     if key == inputOption then
       if k == 'quit' then
         love.event.push("quit")
+      elseif k == "interact" then
+        love.event.push("gameEvent","interact",entity.position.x,entity.position.y)
       end
     end
   end
