@@ -26,6 +26,7 @@ StairCollision = require("src.systems.stairCollision")
 RemoveCollisions = require("src.systems.removeCollisions")
 --event systems
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
+ResetWorld = require("src.systems.eventSystems.resetWorld")
 
 function initializeSystems()
   --update Systems
@@ -50,6 +51,7 @@ function initializeSystems()
   --event systems
   type = "event"
   Systems:new(type,ToggleVisibleEvent,true,false)
+  Systems:new(type,ResetWorld,true,false)
   --turn systems
   Systems:new(type,ActionStep,true,false)
   Systems:new(type,Movement,true,false)

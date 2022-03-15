@@ -13,7 +13,7 @@ function mapGenerator(cwid,wid,hei,start,mapId,floor)
     position = Components.position(0,0),
     spriteMap = Components.spriteMap(),
     mapIdentifier = Components.mapIdentifier(mapId),
-    mapData = Components.mapData(),
+    mapData = Components.mapData(floor),
     camera = nil
   }
   return MapGenerator

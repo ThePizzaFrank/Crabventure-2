@@ -6,34 +6,35 @@ function player()
   return {}
 end
 
-function collider(type)
-  Collider = {
+function collider(type,name)
+  local Collider = {
     width = 1,
     height = 1,
     type = type,
     active = true,
     id = globals.currentCollider,
+    name = name,
   }
   globals.currentCollider = globals.currentCollider + 1
   return Collider
 end
 
 function collisionMap()
-  CollisionMap = {
+  local CollisionMap = {
     map = {}
   }
   return CollisionMap
 end
 
 function sprite(key)
-  Sprite = {
+  local Sprite = {
     key = key,
   }
   return Sprite
 end
 
 function spriteMap()
-  SpriteMap = {
+  local SpriteMap = {
     --key is a number
     --0 for floor
     --1 for wall
@@ -44,14 +45,14 @@ function spriteMap()
 end
 
 function batchMap()
-  BatchMap = {
+  local BatchMap = {
     mapping = {}
   }
   return BatchMap
 end
 
 function movement(x,y, turns)
-  Movement = {
+  local Movement = {
     x = x,
     y = y,
     turns = turns
@@ -60,7 +61,7 @@ function movement(x,y, turns)
 end
 
 function dirtyBit(bool)
-  DirtyBit = {
+  local DirtyBit = {
     bit = bool,
     --target contains key to the sprite x and y position coordinates
     target = {}
@@ -71,21 +72,21 @@ end
 
 --delay after you do something
 function action(turns)
-  Action = {
+  local Action = {
     turns = turns
   }
   return Action
 end
 
 function stats(movement)
-  Stats = {
+  local Stats = {
     movement = movement
   }
   return Stats
 end
 
 function directionControls(up,down,left,right)
-  DirectionControls = {
+  local DirectionControls = {
     up = up,
     down = down,
     left = left,
@@ -96,14 +97,14 @@ end
 
 --currently only used for quitting game
 function gameControls(quit)
-  GameControls = {
+  local GameControls = {
     quit = quit
   }
   return GameControls
 end
 
 function position(x,y)
-  Position = {
+  local Position = {
     x = x,
     y = y
   }
@@ -111,7 +112,7 @@ function position(x,y)
 end
 
 function camera(x,y)
-  Camera = {
+  local Camera = {
     x = x,
     y = y
   }
@@ -119,7 +120,7 @@ function camera(x,y)
 end
 
 function cameraTarget(x,y)
-  CameraTarget = {
+  local CameraTarget = {
     x = x,
     y = y
   }
@@ -127,7 +128,7 @@ function cameraTarget(x,y)
 end
 
 function chunks()
-  Chunks = {
+  local Chunks = {
     chunks = {}
   }
   return Chunks
@@ -136,7 +137,7 @@ end
 --chunk width is the size of chunk whereas width and height are the number of
 --chunks wide/high the map is
 function chunkData(chunkWidth, width, height, start)
-  ChunkData = {
+  local ChunkData = {
     chunkWidth = chunkWidth,
     width = width,
     height = height,
@@ -146,7 +147,7 @@ function chunkData(chunkWidth, width, height, start)
 end
 
 function builder(type,width,height)
-  Builder = {
+  local Builder = {
     types = {},
     --parameter contains elements whose indice correspond to the indices of the
     --types array in the builder
@@ -158,7 +159,7 @@ function builder(type,width,height)
 end
 
 function scrollData(min,max)
-  ScrollData = {
+  local ScrollData = {
     scrollPosition = 0,
     --if min/max is not nil scrollPosition cannot go below min and cannot go above max respectively
     scrollMin = min,
@@ -168,31 +169,32 @@ function scrollData(min,max)
 end
 
 function debugData()
-  DebugData = {
+  local DebugData = {
     expanded = false
   }
   return DebugData
 end
 
 function mapIdentifier(val)
-  MapIdentifier = {
+  local MapIdentifier = {
     value = val
   }
   return MapIdentifier
 end
 
 function mapMetaData()
-  MapMetaData = {
+  local MapMetaData = {
     floor = floor
   }
   return MapMetaData
 end
 
-function mapData()
-  MapData = {
+function mapData(floor)
+  local MapData = {
     generated = false,
     merged = false,
     requiredEntities = {},
+    floor = floor,
     count = 0
   }
   return MapData;
@@ -200,28 +202,28 @@ end
 
 function classification(wipe)
   --used for determining some stuff like whether or not it gets removed when the next floor is generated
-  Classification = {
+  local Classification = {
     wipedOnNewFloor = wipe;
   }
   return Classification
 end
 
 function visible(visible)
-  Visible = {
+  local Visible = {
     visible = visible
   }
   return Visible
 end
 
 function toggleVisibleEvent(event)
-  ToggleVisibleEvent = {
+  local ToggleVisibleEvent = {
     event = event
   }
   return ToggleVisibleEvent
 end
 
 function window(width,height)
-  Window = {
+  local Window = {
     width = width,
     height = height
   }
@@ -229,7 +231,7 @@ function window(width,height)
 end
 
 function mouseCollider(width,height)
-  MouseCollider = {
+  local MouseCollider = {
     width = width,
     height = height,
   }
@@ -237,7 +239,7 @@ function mouseCollider(width,height)
 end
 
 function hover()
-  Hover = {
+  local Hover = {
     hover = false
   }
   return Hover
@@ -246,7 +248,7 @@ end
 --emits an event depending on certain situations
 --trigger is determined by other components attached to the entity
 function eventEmitter(event)
-  EventEmitter = {
+  local EventEmitter = {
     event = event
   }
   return EventEmitter
@@ -255,17 +257,19 @@ end
 --depending on how its named can perform different functions based on systems
 --ex. hoverSwap will swap sprite to alt when hovered
 function spriteSwap(default,alt)
-  SpriteSwap = {
+  local SpriteSwap = {
     default = default,
     alt = alt
   }
   return SpriteSwap
 end
 
-function collision(colliderType,colliderId)
-  Collision = {
+function collision(colliderType,colliderId,colliderName,entityId)
+  local Collision = {
     colliderType = colliderType,
-    colliderId = colliderId
+    colliderId = colliderId,
+    colliderName = colliderName,
+    entityId = entityId,
   }
   return Collision
 end

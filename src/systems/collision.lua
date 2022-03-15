@@ -46,8 +46,8 @@ function futurePosition(entity)
 end
 
 function collision(e1,e2)
-  Entities:addComponent(e1._id,"collision",Components.collision(e2.collider.type,e2._id))
-  Entities:addComponent(e2._id,"collision",Components.collision(e1.collider.type,e1._id))
+  Entities:addComponent(e1._id,"collision",Components.collision(e2.collider.type,e2.collider.id,e2.collider.name,e2._id))
+  Entities:addComponent(e2._id,"collision",Components.collision(e1.collider.type,e1.collider.id,e1.collider.name,e1._id))
 end
 
 function checkStatic(future,cMap, pos)
