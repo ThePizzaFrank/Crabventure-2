@@ -1,6 +1,6 @@
 module(...,package.seeall)
 
-globals = require('src.utilities.globals')
+local globals = require('src.utilities.globals')
 
 function player()
   return {}
@@ -174,11 +174,11 @@ function debugData()
   return DebugData
 end
 
-function id(val)
-  Id = {
+function mapIdentifier(val)
+  MapIdentifier = {
     value = val
   }
-  return Id
+  return MapIdentifier
 end
 
 function mapMetaData()
@@ -188,11 +188,14 @@ function mapMetaData()
   return MapMetaData
 end
 
-function genEntities()
-  GenEntities = {
-    generated = true
+function mapData()
+  MapData = {
+    generated = false,
+    merged = false,
+    requiredEntities = {},
+    count = 0
   }
-  return GenEntities;
+  return MapData;
 end
 
 function classification(wipe)

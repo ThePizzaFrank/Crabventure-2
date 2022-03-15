@@ -1,102 +1,109 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
+Entities = require("src.utilities.entityComponentSystems").Entities
 Maze = require("src.utilities.maze")
 Components = require("src.components")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
+MapGroup = require("src.entities.mapGroup")
 
-local filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","id","genEntities"})
+--map generator entities
+filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","mapIdentifier","mapData"})
 
-function update(world)
-  for _,entity in pairs(world) do
-    if filter:fit(entity) then
-      --width of map
-      mwid = entity.chunkData.width
-      --height of map
-      mhei = entity.chunkData.height
-      --width of one chunk in tiles
-      wid = entity.chunkData.chunkWidth
-      --2d array of chunks
-      chunks = entity.chunks.chunks
+function update(entity)
+  --width of map
+  local mwid = entity.chunkData.width
+  --height of map
+  local mhei = entity.chunkData.height
+  --width of one chunk in tiles
+  local wid = entity.chunkData.chunkWidth
+  --2d array of chunks
+  local chunks = entity.chunks.chunks
+  --number of chunks
+  local numChunks = 0
 
-      --get the maze from maze.lua, currently always uses maze1 but maybe I'll add more possible maze algorithms
-      maze = Maze.maze1(mwid,mhei,entity.chunkData.start)
+  --get the maze from maze.lua, currently always uses maze1 but maybe I'll add more possible maze algorithms
+  maze = Maze.maze1(mwid,mhei,entity.chunkData.start)
 
-      --build map 'chunks' based off the maze we created
-      --chunks are just an array of openings in each 'room'
-      for x = 1, mwid do
-        chunks[x] = {}
-        for y = 1, mhei do
-          chunks[x][y] = {}
-          --maze spot is a shitty variable name for a 'room' in the maze
-          mazeSpot = maze[x][y]
-          --list of attachment points for a room
-          holes = mazeSpot.holes
+  --build map 'chunks' based off the maze we created
+  --chunks are just an array of openings in each 'room'
+  for x = 1, mwid do
+    chunks[x] = {}
+    for y = 1, mhei do
+      chunks[x][y] = {}
+      --maze spot is a shitty variable name for a 'room' in the maze
+      mazeSpot = maze[x][y]
+      --list of attachment points for a room
+      holes = mazeSpot.holes
 
-          for _,hole in ipairs(holes) do
-            currentHole = {x = 0, y = 0,width = 0}
-            --if chunk has already had its holes generated
-            if chunks[x+hole.x] and chunks[x+hole.x][y+hole.y] then
-              found = searchPair(hole,chunks[x+hole.x][y+hole.y])
-              if found ~= nil then
-                currentHole = pairOpening(hole,wid,3,found)
-              else
-                currentHole = genOpening(hole,wid,3)
-              end
-            --if chunk hasn't been processed yet
-            else
-              currentHole = genOpening(hole,wid,3)
-            end
-            table.insert(chunks[x][y],currentHole)
-          end
-          builder = StaticTCMGrower.staticTCMGrower()
-          --if chunk has only 2 holes it has a 66% chance to be generated as a hallway
-          if #chunks[x][y] == 2 and love.math.random(3) > 1 then
-            builder.builder.types = {2,5} --will first make a full chunk (all walls) then layer a hallway on top of it
-            --hallway parameters
-            builder.builder.parameters[2] = {
-              --width of the hallway
-              width = chunks[x][y][1].width,
-              --start of the hallway
-              --since there are only 2 openings we can use chunk[x][y][1] and chunk[x][y][2]
-              sPos =
-                {x = chunks[x][y][1].x, y = chunks[x][y][1].y},
-              --end of the hallway
-              ePos =
-                {x = chunks[x][y][2].x, y = chunks[x][y][2].y}
-            }
-          --otherwise just make a square walled room, will have more options here later :)
+      for _,hole in ipairs(holes) do
+        currentHole = {x = 0, y = 0,width = 0}
+        --if chunk has already had its holes generated
+        if chunks[x+hole.x] and chunks[x+hole.x][y+hole.y] then
+          found = searchPair(hole,chunks[x+hole.x][y+hole.y])
+          if found ~= nil then
+            currentHole = pairOpening(hole,wid,3,found)
           else
-            builder.builder.types = {1,3} --will first make an empty room(all floor) then layer a wall around it
-            count = 2
-            --layer on the empty chunks
-            for h = 1, #chunks[x][y] do
-              count = count + 1
-              table.insert(builder.builder.types,4) --empty chunk so that you can exit the room
-              builder.builder.parameters[count] = {
-                width = chunks[x][y][h].width,
-                height = chunks[x][y][h].width,
-                position = {
-                  x = chunks[x][y][h].x,
-                  y = chunks[x][y][h].y
-                }
-              }
-            end
+            currentHole = genOpening(hole,wid,3)
           end
-          builder.builder.width = wid
-          builder.builder.height = wid
-          builder.position.x = wid*(x-1)
-          builder.position.y = wid*(y-1)
-          builder.spriteMap = entity.spriteMap
-          builder.camera = entity.camera
-          builder.id = Components.id(entity.id.value)
-          builder.genEntities = entity.genEntities
-          table.insert(world,builder)
+        --if chunk hasn't been processed yet
+        else
+          currentHole = genOpening(hole,wid,3)
+        end
+        table.insert(chunks[x][y],currentHole)
+      end
+      builder = StaticTCMGrower.staticTCMGrower()
+      --if chunk has only 2 holes it has a 66% chance to be generated as a hallway
+      if #chunks[x][y] == 2 and love.math.random(3) > 1 then
+        builder.builder.types = {2,5} --will first make a full chunk (all walls) then layer a hallway on top of it
+        --hallway parameters
+        builder.builder.parameters[2] = {
+          --width of the hallway
+          width = chunks[x][y][1].width,
+          --start of the hallway
+          --since there are only 2 openings we can use chunk[x][y][1] and chunk[x][y][2]
+          sPos =
+            {x = chunks[x][y][1].x, y = chunks[x][y][1].y},
+          --end of the hallway
+          ePos =
+            {x = chunks[x][y][2].x, y = chunks[x][y][2].y}
+        }
+      --otherwise just make a square walled room, will have more options here later :)
+      else
+        builder.builder.types = {1,3} --will first make an empty room(all floor) then layer a wall around it
+        count = 2
+        --layer on the empty chunks
+        for h = 1, #chunks[x][y] do
+          count = count + 1
+          table.insert(builder.builder.types,4) --empty chunk so that you can exit the room
+          builder.builder.parameters[count] = {
+            width = chunks[x][y][h].width,
+            height = chunks[x][y][h].width,
+            position = {
+              x = chunks[x][y][h].x,
+              y = chunks[x][y][h].y
+            }
+          }
         end
       end
-      entity.chunks = nil
-      entity.chunkData = nil
+      builder.builder.width = wid
+      builder.builder.height = wid
+      builder.position.x = wid*(x-1)
+      builder.position.y = wid*(y-1)
+      builder.spriteMap = entity.spriteMap
+      builder.camera = entity.camera
+      builder.mapIdentifier = Components.mapIdentifier(entity.mapIdentifier.value)
+      Entities:add(builder)
+      numChunks = numChunks + 1
     end
   end
+  mapGroup = MapGroup.mapGroup()
+  mapGroup.mapData = entity.mapData
+  mapGroup.mapData.count = numChunks
+  mapGroup.mapIdentifier = builder.mapIdentifier
+  mapGroup.camera = entity.camera
+  Entities:add(mapGroup)
+  Entities:removeComponent(entity._id,"chunks")
+  Entities:removeComponent(entity._id,"chunkData")
 end
 
 function genOpening(hole,cwid,hwid)

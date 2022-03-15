@@ -6,6 +6,7 @@ turns = 0;
 currentCollider = 0;
 itemId = 0;
 scale = 1;
+CombineChunkSystem = {}
 
 CollisionEnum = {
   Player = 0,

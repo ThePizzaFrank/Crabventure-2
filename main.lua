@@ -4,92 +4,36 @@ module(...,package.seeall)
 love.graphics.setDefaultFilter( "nearest","nearest" )
 
 Filter = require("src.utilities.filter")
+ECS = require("src.utilities.entityComponentSystems")
+SystemLoader = require("src.utilities.systemLoader")
 Maze = require("src.utilities.maze")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 MapGenerator = require("src.entities.mapGenerator")
 Inventory = require("src.entities.inventory")
+Staircase = require("src.entities.staircase")
 --component
 Components = require("src.components")
---systems
-OverlayDraw = require("src.systems.overlayDraw")
-StaticDraw = require("src.systems.staticDraw")
-MultiDraw = require("src.systems.multiDraw")
-WindowDraw = require("src.systems.windowDraw")
-UpdateBatch = require("src.systems.updateBatch")
-PlayerControl = require("src.systems.playerControl")
-PlayerAction = require("src.systems.playerAction")
-ActionStep = require("src.systems.actionStep")
-Movement = require("src.systems.movement")
-Collision = require("src.systems.collision")
-CameraFollow = require("src.systems.cameraFollow")
-BuildChunk = require("src.systems.buildChunk")
-BuildMap = require("src.systems.buildMap")
-Debug = require("src.systems.debug")
-ScrollBar = require("src.systems.scrollBar")
-CombineChunks = require("src.systems.combineChunks")
-DebugExpand = require("src.systems.debugExpand")
-GenerateEntities = require("src.systems.generateEntities")
-ButtonClick = require("src.systems.buttonClick")
-StairCollision = require("src.systems.stairCollision")
-RemoveCollisions = require("src.systems.removeCollisions")
---event systems
-ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 --Some global vars
 globals = require('src.utilities.globals')
 
-UpdateSystems = {
-  BuildMap,
-  BuildChunk,
-  CombineChunks,
-  GenerateEntities,
-  UpdateBatch,
-  Collision,
-  --Collisions
-  StairCollision,
-  RemoveCollisions,
-}
+Debug = require("src.systems.debug")
 
-EventSystems = {
-  ToggleVisibleEvent
-}
+Entities = ECS.Entities
+Systems = ECS.Systems
 
-TurnSystems = {
-  ActionStep,
-  Movement
-}
 
-DrawSystems = {
-  CameraFollow,
-  MultiDraw,
-  StaticDraw,
-  WindowDraw,
-  OverlayDraw,
-  Debug
-}
-
-KeyUpSystems = {
-  PlayerControl,
-  DebugExpand
-}
-
-MouseClickSystems = {
-  ButtonClick
-}
-
-ScrollSystems = {
-  ScrollBar
-}
 
 function love.load(arg)
 
   world = {}
-
+  SystemLoader.initializeSystems()
   eventHandler = function (event,arg1,arg2)
-    for _,v in ipairs(EventSystems) do
-      v.update(world,event,arg1,arg2)
-    end
+    Systems:run("event",event,arg1,arg2)
+    --for _,v in ipairs(EventSystems) do
+      --v.update(world,event,arg1,arg2)
+    --end
   end
 
   love.handlers["gameEvent"] = eventHandler
@@ -138,66 +82,59 @@ function love.load(arg)
   mGen.camera = camera
   mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
   mGen.spriteMap.mapping[0] = {"floor_1"}
-  table.insert(world,blob)
-  table.insert(world,mGen)
-  table.insert(world,debugScroller)
-  table.insert(world,inventoryCloseButton)
-  table.insert(world,inventory)
+  stair = Staircase.staircase()
+  table.insert(mGen.mapData.requiredEntities,stair)
+  Entities:add(blob)
+  Entities:add(mGen)
+  Entities:add(debugScroller)
+  Entities:add(inventoryCloseButton)
+  Entities:add(inventory)
+  --Entities:add()
   --table.insert(world,builder)
 end
 
 function love.draw()
-  for _,v in pairs(DrawSystems) do
-    v.update(world)
-  end
+  Systems:run("draw")
 end
 
 function love.update(dt)
-  for _,v in ipairs(UpdateSystems) do
-    v.update(world)
-  end
-  --[[
-  --checks if there are any events
-  hasEvents = false
-  for n, a, b, c, d, e, f in love.event.poll() do
-    hasEvents = true
-    break
-  end
-  --if there are no events then we don't have to run through all the event systems
-  --and improve performance!
-  if hasEvents then
-    for _,v in ipairs(EventSystems) do
-      v.update(world,love.event.poll())
-    end
-  end
-  ]]
-  if PlayerAction.update(world) > 0 then
+  Systems:run("update")
+  --for _,v in ipairs(UpdateSystems) do
+    --v.update(world)
+  --end
+  if Systems:run("special") > 0 then
     takeTurn()
   end
 end
 
 function takeTurn()
-  for _,v in ipairs(TurnSystems) do
-    v.update(world)
-  end
+  Systems:run("turn")
+  --for _,v in ipairs(TurnSystems) do
+    --v.update(world)
+  --end
 end
 
 function love.keyreleased(key)
-    for _,v in ipairs(KeyUpSystems) do
-      v.update(world,key)
-    end
+  Systems:run("keyUp",key)
+    --for _,v in ipairs(KeyUpSystems) do
+      --v.update(world,key)
+    --end
 end
 
 function love.wheelmoved(x, y)
-  for _,v in ipairs(ScrollSystems) do
-    v.update(world,y)
-  end
+  Systems:run("scroll",y)
+  --for _,v in ipairs(ScrollSystems) do
+    --v.update(world,y)
+  --end
 end
 
 function love.mousereleased(x, y, button, isTouch)
   if button == 1 then
-    for _,v in ipairs(MouseClickSystems) do
-      v.update(world,x,y,button)
-    end
+    Systems:run("click",x,y,button)
   end
+  --if button == 1 then
+    --for _,v in ipairs(MouseClickSystems) do
+      --v.update(world,x,y,button)
+    --end
+  --end
 end

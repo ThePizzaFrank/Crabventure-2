@@ -11,8 +11,7 @@ function staticTexturedCollisionMap()
     position = Components.position(0,0),
     spriteMap = Components.spriteMap(),
     batchMap = Components.batchMap(),
-    id = Components.id(-1),
-    genEntities = Components.genEntities(),
+    mapIdentifier = Components.mapIdentifier(-1),
     camera = nil,
     dirtyBit = Components.dirtyBit(true)
   }

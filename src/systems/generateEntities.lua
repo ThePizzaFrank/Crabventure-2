@@ -1,6 +1,6 @@
 module(...,package.seeall)
 Filter = require("src.utilities.filter")
-
+Entities = require("src.utilities.entityComponentSystems").Entities
 Components = require("src.components")
 Staircase = require("src.entities.staircase")
 
@@ -8,21 +8,24 @@ globals = require('src.utilities.globals')
 assets = require('src.assets')
 
 
-local filter = Filter.filter({"collisionMap","genEntities","camera"})
+filter = Filter.filter({"mapIdentifier","mapData","camera"})
 
-function update(world)
+function update(entity)
+  if not(entity.mapData.merged) or entity.mapData.generated then
+    return
+  end
   unionMap = Components.collisionMap();
   matched = false
-  camera = nil
-  for _,entity in pairs(world) do
-    if filter:fit(entity) then
-      if not(matched) then
-        camera = entity.camera
-      end
+  camera = entity.camera
+  loopFilter = Filter.filter({"collisionMap","mapIdentifier","camera"})
+  filterEntities = Entities:filterAll(loopFilter,false,true)
+
+  for _,loopEntity in pairs(filterEntities) do
+    if loopEntity.mapIdentifier.value == entity.mapIdentifier.value then
       matched = true
 
       --here we're going to union all the complete collisionmaps so we know all tiles that can have entities placed on them
-      for x,xval in pairs(entity.collisionMap.map) do
+      for x,xval in pairs(loopEntity.collisionMap.map) do
         for y,open in pairs(xval) do
           --if the tile is open on this particular collision map
           if open == 0 then
@@ -43,10 +46,7 @@ function update(world)
           end
         end
       end
-      --once this is all over remove the genEntities from the entity
-      --might want to do this later if genentities contains useful data used later
-      --but I'm not ready for that yet
-      entity.genEntities = nil
+
     end
   end
   if matched then
@@ -59,35 +59,43 @@ function update(world)
         end
       end
     end
-    --then generate the entities, not sure how I want to do this yet though
-    --for now I'll hardcode each entity I want to spawn but eventually
-    --I want to fill genEntities with params that can be parsed for each set of entities
-
-    --generate staircase
-    --staircase must never have any adjacent things (walls, other entities, etc)
-    --just makes it easier for me
-    stairPlaced = false;
-    --stair has to be more unique than other entities because of how important it is,
-    --so the position its placed needs to be catalogued so other items don't interfere with it
+    --then generate the entities using mapData.requiredEntities and some hardcoded
     stairPos = {}
-    while not(stairPlaced) do
-      index = love.math.random(#openTiles);
-      stairPos = openTiles[index]
-      notSurrounded = true
-      for x = -1, 1 do
-        for y = -1, 1 do
-          notSurrounded = notSurrounded and unionMap.map[stairPos.x+x][stairPos.y+y] == 0
+    for _,groundEntity in pairs(entity.mapData.requiredEntities) do
+      --generate staircase
+      --staircase must never have any adjacent things (walls, other entities, etc)
+      --just makes it easier for me
+      placed = false;
+      pos = {}
+      --stair has to be more unique than other entities because of how important it is,
+      --so the position its placed needs to be catalogued so other items don't interfere with it
+      isStairCase = groundEntity._type == 'stairCase'
+      while not(placed) do
+        index = love.math.random(#openTiles);
+        if isStairCase then
+          stairPos = openTiles[index]
         end
-      end
-      if notSurrounded then
-        stairPlaced = true
-        stairCase = Staircase.staircase(stairPos.x,stairPos.y)
-        stairCase.camera = camera
-        --place stair
-        table.insert(world,stairCase)
-        --remove stair position from openTiles
-        table.remove(openTiles,index)
+        pos = openTiles[index]
+        notSurrounded = true
+        for x = -1, 1 do
+          for y = -1, 1 do
+            notSurrounded = notSurrounded and unionMap.map[pos.x+x][pos.y+y] == 0
+          end
+        end
+        if notSurrounded then
+          placed = true
+          groundEntity.position.x = pos.x
+          groundEntity.position.y = pos.y
+          groundEntity.camera = camera
+          --place entity
+          Entities:add(groundEntity)
+          --remove stair position from openTiles
+          if isStairCase then
+            table.remove(openTiles,index)
+          end
+        end
       end
     end
   end
+  entity.mapData.generated = true
 end

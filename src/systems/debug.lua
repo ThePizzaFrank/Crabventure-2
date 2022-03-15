@@ -1,34 +1,30 @@
 module(...,package.seeall)
-
 Filter = require("src.utilities.filter")
-globals = require("src.utilities.globals")
+Entities = require("src.utilities.entityComponentSystems").Entities
 
-local filter = Filter.filter({"scrollData","debugData"})
+globals = require('src.utilities.globals')
 
-function update(world)
-  i = 0
-  sp = 0
-  ln = 1
-  fps = 0
-  expanded = false
-  for _,entity in ipairs(world) do
-    if(filter:fit(entity)) then
-      sp = entity.scrollData.scrollPosition
-      expanded = entity.debugData.expanded
-      fps = love.timer.getFPS( )
-      love.graphics.print(globals.turns,0,0)
-      love.graphics.print(fps,0,13)
-    end
-  end
-  for _,entity in ipairs(world) do
+filter = Filter.filter({"scrollData","debugData"})
+
+
+function update(entity)
+  local i = 0
+  local sp = entity.scrollData.scrollPosition
+  local ln = 1
+  local fps = love.timer.getFPS( )
+  local expanded = entity.debugData.expanded
+  love.graphics.print(globals.turns,0,0)
+  love.graphics.print(fps,0,13)
+  for entityId,_ in pairs(Entities.entities) do
+    menuEntity = Entities:get(entityId)
     i = i + 1
     ln = ln + 1
-    if entity._type == nil then
+    if menuEntity._type == nil then
       love.graphics.print("entity unknown",0,13*(ln+sp))
     else
-      love.graphics.print("entity "..entity._type,0,13*(ln+sp))
+      love.graphics.print("entity "..menuEntity._type,0,13*(ln+sp))
     end
-    for name,componentValue in pairs(entity) do
+    for name,componentValue in pairs(menuEntity) do
       ln = ln + 1
       if expanded then
         if type(componentValue) == "table" then
