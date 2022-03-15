@@ -12,6 +12,7 @@ StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 MapGenerator = require("src.entities.mapGenerator")
 Inventory = require("src.entities.inventory")
+Staircase = require("src.entities.staircase")
 --component
 Components = require("src.components")
 --Some global vars
@@ -81,6 +82,8 @@ function love.load(arg)
   mGen.camera = camera
   mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
   mGen.spriteMap.mapping[0] = {"floor_1"}
+  stair = Staircase.staircase()
+  table.insert(mGen.mapData.requiredEntities,stair)
   Entities:add(blob)
   Entities:add(mGen)
   Entities:add(debugScroller)
@@ -99,7 +102,7 @@ function love.update(dt)
   --for _,v in ipairs(UpdateSystems) do
     --v.update(world)
   --end
-  if Systems:run("special" ) > 0 then
+  if Systems:run("special") > 0 then
     takeTurn()
   end
 end

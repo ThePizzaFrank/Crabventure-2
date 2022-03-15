@@ -18,14 +18,18 @@ Entities = {
     end
     --populate components tables with entity's components
     for name, component in pairs(entity) do
-      if name ~= "_id" then
+      if name ~= "_id" and name ~= "_type" then
         if not(self.components[name]) then
           self.components[name] = {}
         end
         self.components[name][id] = component
       end
     end
-    self.entities[id] = true
+    local entityType = entity._type
+    if not(entityType) then
+      entityType = "entity"
+    end
+    self.entities[id] = entityType
     return self:get(id)
   end,
   --filter trims the get to only relevant components that match the filter if filter doesn't match returns nil
@@ -35,10 +39,10 @@ Entities = {
       return nil
     end
     local entity = {
-      _id = entityId
+      _id = entityId,
+      _type = self.entities[entityId]
     }
     if filter then
-      entity["_type"] = self.components["_type"][entityId]
       for _,name in ipairs(filter.filters) do
         local matchedComp = self.components[name][entityId]
         if matchedComp then
@@ -79,10 +83,15 @@ Entities = {
     end
     --repopulate components tables with entity's components
     for name, component in pairs(entity) do
-      if not(self.components[name]) then
-        self.components[name] = {}
+      if name ~= "_id" and name ~= "_type" then
+        if not(self.components[name]) then
+          self.components[name] = {}
+        end
+        self.components[name][id] = component
       end
-      self.components[name][id] = component
+    end
+    if entity._type then
+      self.entities[id] = entity._type
     end
     return self:get(id)
   end,
@@ -133,6 +142,9 @@ Entities = {
   end,
   removeComponent = function (self,entityId,componentName)
     self.components[componentName][entityId] = nil
+  end,
+  exists = function (self,entityId)
+    return self.entities[entityId] ~= nil
   end
 }
 
@@ -143,13 +155,19 @@ Systems = {
     local args = {...}
     local runSystems = self.systems[type]
     for _,system in pairs(runSystems) do
-      for k,entity in pairs(Entities:filterAll(system.filter,false,not(system.requireAll))) do
-        local update = system.update(entity,args[1],args[2],args[3],args[4])
-        if(type == "special") then
-          return update
-        end
-        if(system.updateRequired) then
-          Entities:update(entity)
+      if system.enabled then
+        for k,entity in pairs(Entities:filterAll(system.filter,false,not(system.requireAll))) do
+          --a check to make sure the entity hasn't been deleted
+          --also check system is enabled again just in case system disables itself
+          if Entities:exists(entity._id) and system.enabled then
+            local update = system.update(entity,args[1],args[2],args[3],args[4])
+            if(type == "special") then
+              return update
+            end
+            if system.updateRequired and Entities:exists(entity._id) then
+              Entities:update(entity)
+            end
+          end
         end
       end
     end
@@ -161,13 +179,14 @@ Systems = {
     if not(self.systems[type]) then
       self.systems[type] = {}
     end
-    table.insert(self.systems[type],
-    {
+    local newSystem = {
       update = file.update,
       filter = file.filter,
       requireAll = requireAll,
       updateRequired = updateRequired or false,
       enabled = true,
-    })
+    }
+    table.insert(self.systems[type],newSystem)
+    return newSystem
   end,
 }

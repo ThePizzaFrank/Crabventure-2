@@ -4,19 +4,22 @@ Entities = require("src.utilities.entityComponentSystems").Entities
 Maze = require("src.utilities.maze")
 Components = require("src.components")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
+MapGroup = require("src.entities.mapGroup")
 
 --map generator entities
-filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","id","genEntities"})
+filter = Filter.filter({"chunks","chunkData","position","spriteMap","camera","mapIdentifier","mapData"})
 
 function update(entity)
   --width of map
-  mwid = entity.chunkData.width
+  local mwid = entity.chunkData.width
   --height of map
-  mhei = entity.chunkData.height
+  local mhei = entity.chunkData.height
   --width of one chunk in tiles
-  wid = entity.chunkData.chunkWidth
+  local wid = entity.chunkData.chunkWidth
   --2d array of chunks
-  chunks = entity.chunks.chunks
+  local chunks = entity.chunks.chunks
+  --number of chunks
+  local numChunks = 0
 
   --get the maze from maze.lua, currently always uses maze1 but maybe I'll add more possible maze algorithms
   maze = Maze.maze1(mwid,mhei,entity.chunkData.start)
@@ -88,11 +91,17 @@ function update(entity)
       builder.position.y = wid*(y-1)
       builder.spriteMap = entity.spriteMap
       builder.camera = entity.camera
-      builder.id = Components.id(entity.id.value)
-      builder.genEntities = entity.genEntities
+      builder.mapIdentifier = Components.mapIdentifier(entity.mapIdentifier.value)
       Entities:add(builder)
+      numChunks = numChunks + 1
     end
   end
+  mapGroup = MapGroup.mapGroup()
+  mapGroup.mapData = entity.mapData
+  mapGroup.mapData.count = numChunks
+  mapGroup.mapIdentifier = builder.mapIdentifier
+  mapGroup.camera = entity.camera
+  Entities:add(mapGroup)
   Entities:removeComponent(entity._id,"chunks")
   Entities:removeComponent(entity._id,"chunkData")
 end

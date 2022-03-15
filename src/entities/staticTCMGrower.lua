@@ -10,8 +10,7 @@ function staticTCMGrower()
     builder = Components.builder(),
     position = Components.position(0,0),
     spriteMap = Components.spriteMap(),
-    id = Components.id(-1),
-    genEntities = Components.genEntities(),
+    mapIdentifier = Components.mapIdentifier(-1),
     camera = nil
   }
   return StaticTCMGrower

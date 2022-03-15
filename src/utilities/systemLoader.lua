@@ -1,5 +1,6 @@
 module(...,package.seeall)
 Systems = require("src.utilities.entityComponentSystems").Systems
+globals = require("src.utilities.globals")
 
 --load your systems in here
 OverlayDraw = require("src.systems.overlayDraw")
@@ -31,8 +32,8 @@ function initializeSystems()
   local type = "update"
   Systems:new(type,BuildMap,true,false)
   Systems:new(type,BuildChunk,true,true)
-  --Systems:new(type,CombineChunks,true,true)
-  --Systems:new(type,GenerateEntities,true,false)
+  Systems:new(type,CombineChunks,false,false)
+  Systems:new(type,GenerateEntities,true,false)
   Systems:new(type,UpdateBatch,true,false)
   Systems:new(type,Collision,true,false)
   --collisions
