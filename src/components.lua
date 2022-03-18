@@ -3,7 +3,10 @@ module(...,package.seeall)
 local globals = require('src.utilities.globals')
 
 function player()
-  return {}
+  local Player = {
+    canAct = true
+  }
+  return Player
 end
 
 function collider(type,name)
@@ -279,4 +282,11 @@ function inventory()
     items = {}
   }
   return Inventory
+end
+
+function deleteEvent(event)
+  local DeleteEvent = {
+    event = event
+  }
+  return DeleteEvent
 end

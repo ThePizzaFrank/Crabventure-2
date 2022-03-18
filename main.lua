@@ -11,7 +11,7 @@ Maze = require("src.utilities.maze")
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
 MapGenerator = require("src.entities.mapGenerator")
-Inventory = require("src.entities.inventory")
+PlayerInventory = require("src.entities.playerInventory")
 Staircase = require("src.entities.staircase")
 Chest = require("src.entities.chest")
 --component
@@ -76,8 +76,8 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
-  inventory = Inventory.inventory()
-  inventoryCloseButton = Inventory.inventoryCloseButton()
+  inventory = PlayerInventory.playerInventory()
+  inventoryCloseButton = PlayerInventory.inventoryCloseButton()
 
   mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1},0)
   mGen.camera = camera

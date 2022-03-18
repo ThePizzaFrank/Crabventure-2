@@ -32,6 +32,13 @@ Entities = {
     self.entities[id] = entityType
     return self:get(id)
   end,
+  bulkAdd = function (self,entities)
+    retEntities = {}
+    for _,entity in ipairs(entities) do
+      table.insert(retEntities,self:add(entity));
+    end
+    return retEntities
+  end,
   --filter trims the get to only relevant components that match the filter if filter doesn't match returns nil
   get = function (self,entityId,filter)
     filter = filter or nil

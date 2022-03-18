@@ -8,7 +8,7 @@ function inventoryEntities()
 end
 
 --inventory menu entity
-function inventory()
+function playerInventory()
   Inventory =
   {
     _type = "Inventory",

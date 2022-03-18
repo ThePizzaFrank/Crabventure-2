@@ -29,11 +29,12 @@ ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 ResetWorld = require("src.systems.eventSystems.resetWorld")
 Interact = require("src.systems.eventSystems.interact")
 OpenChest = require("src.systems.eventSystems.openChest")
+DeleteEvent = require("src.systems.eventSystems.deleteEvent")
 
 function initializeSystems()
   --update Systems
   local type = "update"
-  Systems:new(type,BuildMap,true,false)
+  Systems:new(type,BuildMap,false,false)
   Systems:new(type,BuildChunk,true,true)
   Systems:new(type,CombineChunks,false,false)
   Systems:new(type,GenerateEntities,true,false)
@@ -56,6 +57,7 @@ function initializeSystems()
   Systems:new(type,ResetWorld,true,false)
   Systems:new(type,Interact,true,false)
   Systems:new(type,OpenChest,true,false)
+  Systems:new(type,DeleteEvent,true,false)
   --turn systems
   Systems:new(type,ActionStep,true,false)
   Systems:new(type,Movement,true,false)
