@@ -5,7 +5,7 @@ Components = require("src.components")
 Filter = require("src.utilities.filter")
 Entities = require("src.utilities.entityComponentSystems").Entities
 
-filter = Filter.filter({"position","directionControls","gameControls","action","stats"})
+filter = Filter.filter({"player","position","directionControls","gameControls","action","stats"})
 
 function update(entity,key)
   handleInput(entity,key)
@@ -14,8 +14,9 @@ end
 function handleInput(entity,key)
   --temp to test events
   if key == 'i' then
-    love.event.push("gameEvent","inventoryClose")
+    love.event.push("gameEvent","inventoryToggle")
   end
+
   --end temp
   for k,inputOption in pairs(entity.gameControls) do
     if key == inputOption then
@@ -41,6 +42,8 @@ function handleInput(entity,key)
         entity.action.turns = entity.stats.movement
         Entities:addComponent(entity._id,"movement",Components.movement(1,0))
       end
+      --TODO: FIGURE OUT WHY THIS BREAKS COLLISION
+      --love.event.push("gameEvent","closeAll")
     end
   end
 end

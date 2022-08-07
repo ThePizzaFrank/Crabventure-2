@@ -98,10 +98,11 @@ function directionControls(up,down,left,right)
   return DirectionControls
 end
 
-function gameControls(quit,interact)
+function gameControls(quit,interact,close)
   local GameControls = {
-    quit = quit,
-    interact = interact
+    quit = quit, --probably remove this later
+    interact = interact,
+    close = close,
   }
   return GameControls
 end
@@ -218,6 +219,13 @@ function visible(visible)
   return Visible
 end
 
+function interfaceVisible(visible)
+  local InterfaceVisible = {
+    visible = visible
+  }
+  return InterfaceVisible
+end
+
 function toggleVisibleEvent(event)
   local ToggleVisibleEvent = {
     event = event
@@ -289,4 +297,13 @@ function deleteEvent(event)
     event = event
   }
   return DeleteEvent
+end
+
+function userInterface(elements,open,openEvent)
+  local UserInterface = {
+    elements = elements or {},
+    open = open,
+    openEvent = openEvent
+  }
+  return UserInterface
 end

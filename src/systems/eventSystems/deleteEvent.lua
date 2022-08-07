@@ -5,9 +5,14 @@ Entities = require("src.utilities.entityComponentSystems").Entities
 filter = Filter.filter({"deleteEvent"})
 
 function update(entity,event)
-  entityEvent = entity.deleteEvent.event
-  print(event,entityEvent)
-  if event == entityEvent then
-    Entities:remove(entity)
+  local entityEvent = entity.deleteEvent.event
+  if event ~= entityEvent then
+    return
   end
+  if entity.userInterface then
+    for _,id in pairs(entity.userInterface.elements) do
+      Entities:remove(id)
+    end
+  end
+  Entities:remove(entity)
 end

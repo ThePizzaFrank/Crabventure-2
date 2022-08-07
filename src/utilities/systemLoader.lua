@@ -28,8 +28,9 @@ RemoveCollisions = require("src.systems.removeCollisions")
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 ResetWorld = require("src.systems.eventSystems.resetWorld")
 Interact = require("src.systems.eventSystems.interact")
-OpenChest = require("src.systems.eventSystems.openChest")
+OpenInterface = require("src.systems.eventSystems.openInterface")
 DeleteEvent = require("src.systems.eventSystems.deleteEvent")
+CloseAllInterfaces = require("src.systems.eventSystems.closeAllInterfaces")
 
 function initializeSystems()
   --update Systems
@@ -39,8 +40,8 @@ function initializeSystems()
   Systems:new(type,CombineChunks,false,false)
   Systems:new(type,GenerateEntities,true,false)
   Systems:new(type,UpdateBatch,true,false)
-  Systems:new(type,Collision,true,false)
   --collisions
+  Systems:new(type,Collision,true,false)
   Systems:new(type,StairCollision,true,false)
   Systems:new(type,RemoveCollisions,true,false)
   --draw systems
@@ -53,10 +54,11 @@ function initializeSystems()
   Systems:new(type,Debug,true,false)
   --event systems
   type = "event"
+  Systems:new(type,CloseAllInterfaces,true,false)
   Systems:new(type,ToggleVisibleEvent,true,false)
   Systems:new(type,ResetWorld,true,false)
   Systems:new(type,Interact,true,false)
-  Systems:new(type,OpenChest,true,false)
+  Systems:new(type,OpenInterface,true,false)
   Systems:new(type,DeleteEvent,true,false)
   --turn systems
   Systems:new(type,ActionStep,true,false)

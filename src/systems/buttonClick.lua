@@ -4,7 +4,7 @@ Filter = require("src.utilities.filter")
 filter = Filter.filter({"mouseCollider","eventEmitter","screenPosition"})
 
 function update(entity,x,y,button)
-  if not(entity.visible) or entity.visible.visible then
+  if not(entity.interfaceVisible) or entity.interfaceVisible.visible then
     xMin = entity.screenPosition.x
     xMax = entity.screenPosition.x + entity.mouseCollider.width
     yMin = entity.screenPosition.y

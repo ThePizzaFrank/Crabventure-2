@@ -88,9 +88,14 @@ function update(entity)
           groundEntity.position.y = pos.y
           groundEntity.camera = camera
           --place entity
-          Entities:add(groundEntity)
+          --if entity is already added then update with new position, otherwise add
+          if(groundEntity._id) then
+            Entities:update(groundEntity)
+          else
+            Entities:add(groundEntity)
+          end
           --remove stair position from openTiles
-          if isStairCase then
+          if isStairCase then --is this wrong?
             table.remove(openTiles,index)
           end
         end

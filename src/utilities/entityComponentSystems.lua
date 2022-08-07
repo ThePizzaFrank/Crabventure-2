@@ -55,7 +55,6 @@ Entities = {
         if matchedComp then
           entity[name] = matchedComp
         else
-          entity = nil
           return nil
         end
       end
@@ -107,6 +106,9 @@ Entities = {
     local id = entity
     if type(entity) == "table" then
       id = entity._id
+    end
+    if not(self:exists(id)) then
+      return false
     end
     for _,component in ipairs(filter.filters) do
       if not(self.components[component] and self.components[component][id]) then
@@ -163,10 +165,16 @@ Systems = {
     local runSystems = self.systems[type]
     for _,system in pairs(runSystems) do
       if system.enabled then
-        for k,entity in pairs(Entities:filterAll(system.filter,false,not(system.requireAll))) do
-          --a check to make sure the entity hasn't been deleted
+        for entityId,k in pairs(Entities.entities) do
+          --check if filter fits and entity exists
           --also check system is enabled again just in case system disables itself
-          if Entities:exists(entity._id) and system.enabled then
+          if Entities:filter(entityId,system.filter) and system.enabled then
+            --print(type)
+            local getFilter = system.filter
+            if system.requireAll then
+              getFilter = nil
+            end
+            local entity = Entities:get(entityId,getFilter)
             local update = system.update(entity,args[1],args[2],args[3],args[4])
             if(type == "special") then
               return update

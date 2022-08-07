@@ -7,7 +7,7 @@ globals = require('src.utilities.globals')
 filter = Filter.filter({"sprite","screenPosition"})
 
 function update(entity)
-  if not(entity.visible) or entity.visible.visible then
+  if not(entity.interfaceVisible) or entity.interfaceVisible.visible then
     draw(entity)
   end
 end

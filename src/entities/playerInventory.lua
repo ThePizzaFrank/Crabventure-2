@@ -1,30 +1,41 @@
 module(...,package.seeall)
 
+Entities = require("src.utilities.entityComponentSystems").Entities
 Components = require("src.components")
 Button = require("src.entities.button")
 --
-function inventoryEntities()
-
+function playerInventory()
+  elements = {}
+  table.insert(elements,Entities:add(playerInventoryWindow())._id)
+  table.insert(elements,Entities:add(playerInventoryCloseButton())._id)
+  return playerInventoryInterface(elements)
 end
 
 --inventory menu entity
-function playerInventory()
-  Inventory =
+function playerInventoryWindow()
+  local PlayerInventoryWindow =
   {
-    _type = "Inventory",
-    visible = Components.visible(false),
-    toggleVisibleEvent = Components.toggleVisibleEvent("inventoryClose"),
+    _type = "InventoryWindow",
+    interfaceVisible = Components.interfaceVisible(false),
     window = Components.window(100,100),
     screenPosition = Components.position(200,200),
     inventory = Components.inventory(),
   }
-  return Inventory
+  return PlayerInventoryWindow
 end
 
-function inventoryCloseButton()
-  InventoryCloseButton = Button.button(200,200,16,16,
-    "inventoryClose","close_button","close_button_hover","close_button_pressed","inventory_close")
-  InventoryCloseButton.visible = Components.visible(false)
-  InventoryCloseButton.toggleVisibleEvent = Components.toggleVisibleEvent("inventoryClose")
-  return InventoryCloseButton
+function playerInventoryCloseButton()
+  local PlayerInventoryCloseButton = Button.button(200,200,16,16,
+    "inventoryToggle","close_button","close_button_hover","close_button_pressed","inventory_close")
+  PlayerInventoryCloseButton.interfaceVisible = Components.interfaceVisible(false)
+  return PlayerInventoryCloseButton
+end
+
+function playerInventoryInterface(elements)
+  local PlayerInventoryInterface = {
+    _type = "InventoryInterface",
+    userInterface = Components.userInterface(elements,false,"inventoryToggle"),
+    interfaceVisible = Components.interfaceVisible(false),
+  }
+  return PlayerInventoryInterface
 end

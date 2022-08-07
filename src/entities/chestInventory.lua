@@ -2,33 +2,39 @@ module(...,package.seeall)
 globals = require("src.utilities.globals")
 Components = require("src.components")
 Button = require("src.entities.button")
---
-function chestMenu(chestId,inventory,camera,x,y)
+
+function chestInventory(chestId,inventory,camera,x,y)
   xPos = globals.tileSize*globals.scale*x-camera.x
   yPos = globals.tileSize*globals.scale*y-camera.y - 300
   event = "chestClose_"..chestId
-  return {
-    chestInventory(event,inventory,xPos,yPos),
-    chestCloseButton(event,xPos,yPos),
-  }
+  elements = {}
+  table.insert(elements,Entities:add(chestWindow(inventory,xPos,yPos))._id)
+  table.insert(elements,Entities:add(chestCloseButton(event,xPos,yPos))._id)
+  return chestUserInterface(event,elements)
 end
 
+
 --inventory menu entity
-function chestInventory(deleteEvent,inventory,xPos,yPos)
-  local ChestInventory =
+function chestWindow(inventory,xPos,yPos)
+  local ChestWindow =
   {
-    _type = "ChestInventory",
-    deleteEvent = Components.deleteEvent(deleteEvent),
+    _type = "chest_window",
     window = Components.window(200,300),
     screenPosition = Components.position(xPos,yPos),
     inventory = inventory,
+    interfaceVisible = Components.interfaceVisible(false),
   }
-  return ChestInventory
+  return ChestWindow
 end
 
-function chestCloseButton(deleteEvent,xPos,yPos)
-  ChestCloseButton = Button.button(xPos,yPos,16,16,
-    deleteEvent,"close_button","close_button_hover","close_button_pressed","chest_close")
-  ChestCloseButton.deleteEvent = Components.deleteEvent(deleteEvent)
-  return ChestCloseButton
+
+
+function chestUserInterface(deleteEvent,elements)
+  local ChestUserInterface = {
+    _type = "chest_interface",
+    userInterface = Components.userInterface(elements,true),
+    toggleVisibleEvent = Components.toggle(deleteEvent),
+    interfaceVisible = Components.interfaceVisible(false),
+  }
+  return ChestUserInterface
 end

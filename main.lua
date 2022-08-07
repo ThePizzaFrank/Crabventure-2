@@ -59,16 +59,10 @@ function love.load(arg)
     action = Components.action(0),
     stats = Components.stats(6),
     directionControls = Components.directionControls("w","s","a","d"),
-    gameControls = Components.gameControls("escape","e"),
+    gameControls = Components.gameControls("`","e","escape"),
     collider = Components.collider(globals.CollisionEnum.Player),
     cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2)
   }
-  blob.collider.colfunc = function(e1,e2,world)
-    movement = Filter.filter({"movement"})
-    if movement:fit(e1) then
-      e1.movement = nil
-    end
-  end
   blob2 = {
     _type = "Individual Wall",
     sprite = Components.sprite("wall_1"),
@@ -76,21 +70,20 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
-  inventory = PlayerInventory.playerInventory()
-  inventoryCloseButton = PlayerInventory.inventoryCloseButton()
 
+  inventory = PlayerInventory.playerInventory()
   mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1},0)
   mGen.camera = camera
   mGen.spriteMap.mapping[1] = {"wall_1","wall_2"}
   mGen.spriteMap.mapping[0] = {"floor_1"}
   stair = Staircase.staircase()
+  chestStatic = Chest.chest(6,6,camera)
   chest = Chest.chest()
   table.insert(mGen.mapData.requiredEntities,stair)
   table.insert(mGen.mapData.requiredEntities,chest)
   Entities:add(blob)
   Entities:add(mGen)
   Entities:add(debugScroller)
-  Entities:add(inventoryCloseButton)
   Entities:add(inventory)
   --Entities:add()
   --table.insert(world,builder)
