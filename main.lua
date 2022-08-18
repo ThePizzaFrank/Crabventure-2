@@ -93,7 +93,14 @@ function love.draw()
   Systems:run("draw")
 end
 
+function blockFPS(max,dt) -- Call this function in love.update
+	if dt < 1/max then
+		love.timer.sleep(1/max-dt)
+	end
+end
+
 function love.update(dt)
+  blockFPS(60,dt)
   Systems:run("update")
   --for _,v in ipairs(UpdateSystems) do
     --v.update(world)
