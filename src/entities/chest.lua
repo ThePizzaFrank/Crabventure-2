@@ -21,21 +21,21 @@ function chestWindow(inventory,xPos,yPos)
 end
 
 function chestCloseButton(visibleEvent,xPos,yPos)
-  ChestCloseButton = Button.button(xPos,yPos,16,16,
+  local ChestCloseButton = Button.button(xPos,yPos,16,16,
     visibleEvent,"close_button","close_button_hover","close_button_pressed","chest_close")
   ChestCloseButton.interfaceVisible = Components.interfaceVisible(false)
   return ChestCloseButton
 end
 
 function chest(x,y,camera)
-  Chest = {
+  local Chest = {
     _type = "Chest",
     classification = Components.classification(true),
     sprite = Components.sprite("chest"),
     position = Components.position(x,y),
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Object,"chest"),
-    inventory = Components.inventory(),
+    inventory = Components.inventory()
   }
 
   local chest = Entities:add(Chest)
@@ -43,7 +43,7 @@ function chest(x,y,camera)
   local event = "chestToggle_"..chest._id
   local xPos = globals.tileSize*globals.scale*10
   local yPos = globals.tileSize*globals.scale*10-300
-  table.insert(elements,Entities:add(chestWindow(inventory,xPos,yPos))._id)
+  table.insert(elements,Entities:add(chestWindow(chest.inventory,xPos,yPos))._id)
   table.insert(elements,Entities:add(chestCloseButton(event,xPos,yPos))._id)
 
   chest.userInterface = Components.userInterface(elements,false,event)
