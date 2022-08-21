@@ -70,6 +70,16 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Wall)
   }
+  blob3 = {
+    _type = "Enemy",
+    sprite = Components.sprite("enemy"),
+    position = Components.position(),
+    action = Components.action(0),
+    camera = camera,
+    collider = Components.collider(globals.CollisionEnum.Enemy),
+    ai = Components.ai(1,blob.position),
+    stats = Components.stats(7),
+  }
 
   inventory = PlayerInventory.playerInventory()
   mGen = MapGenerator.mapGenerator(10,5,5,{x = 1,y = 1},0)
@@ -81,6 +91,7 @@ function love.load(arg)
   chest = Chest.chest()
   table.insert(mGen.mapData.requiredEntities,stair)
   table.insert(mGen.mapData.requiredEntities,chest)
+  table.insert(mGen.mapData.requiredEntities,blob3)
   Entities:add(blob)
   Entities:add(mGen)
   Entities:add(debugScroller)

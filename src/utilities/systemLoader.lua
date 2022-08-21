@@ -24,6 +24,7 @@ GenerateEntities = require("src.systems.generateEntities")
 ButtonClick = require("src.systems.buttonClick")
 StairCollision = require("src.systems.stairCollision")
 RemoveCollisions = require("src.systems.removeCollisions")
+AiDecision = require("src.systems.aiDecision")
 --event systems
 ToggleVisibleEvent = require("src.systems.eventSystems.toggleVisibleEvent")
 ResetWorld = require("src.systems.eventSystems.resetWorld")
@@ -40,8 +41,8 @@ function initializeSystems()
   Systems:new(type,CombineChunks,false,false)
   Systems:new(type,GenerateEntities,true,false)
   Systems:new(type,UpdateBatch,true,false)
-  --collisions
   Systems:new(type,Collision,true,false)
+  Systems:new(type,Movement,true,false)
   Systems:new(type,StairCollision,true,false)
   Systems:new(type,RemoveCollisions,true,false)
   --draw systems
@@ -60,9 +61,6 @@ function initializeSystems()
   Systems:new(type,Interact,true,false)
   Systems:new(type,OpenInterface,true,false)
   Systems:new(type,DeleteEvent,true,false)
-  --turn systems
-  Systems:new(type,ActionStep,true,false)
-  Systems:new(type,Movement,true,false)
   --key up systems
   type = "keyUp"
   Systems:new(type,PlayerControl,true,false)
@@ -79,5 +77,6 @@ function initializeSystems()
   --turns
   type = "turn"
   Systems:new(type,ActionStep,true,false)
-  Systems:new(type,Movement,true,false)
+  Systems:new(type,AiDecision,true,true)
+
 end

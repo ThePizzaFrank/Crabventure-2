@@ -307,3 +307,11 @@ function userInterface(elements,open,openEvent)
   }
   return UserInterface
 end
+
+function ai(type,target,world)
+  local AI = {
+    type = type,
+    target = target,
+  }
+  return AI
+end

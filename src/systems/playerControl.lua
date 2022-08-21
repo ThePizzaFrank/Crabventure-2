@@ -29,18 +29,15 @@ function handleInput(entity,key)
   end
   for k,inputOption in pairs(entity.directionControls) do
     if key == inputOption then
+      --use can act here?
       if k == 'up' and passive(entity) then
-        entity.action.turns = entity.stats.movement
-        Entities:addComponent(entity._id,"movement",Components.movement(0,-1))
+        Entities:addComponent(entity._id,"movement",Components.movement(0,-1,entity.stats.movement))
       elseif k == 'down' and passive(entity) then
-        entity.action.turns = entity.stats.movement
-        Entities:addComponent(entity._id,"movement",Components.movement(0,1))
+        Entities:addComponent(entity._id,"movement",Components.movement(0,1,entity.stats.movement))
       elseif k == 'left' and passive(entity) then
-        entity.action.turns = entity.stats.movement
-        Entities:addComponent(entity._id,"movement",Components.movement(-1,0))
+        Entities:addComponent(entity._id,"movement",Components.movement(-1,0,entity.stats.movement))
       elseif k == 'right' and passive(entity) then
-        entity.action.turns = entity.stats.movement
-        Entities:addComponent(entity._id,"movement",Components.movement(1,0))
+        Entities:addComponent(entity._id,"movement",Components.movement(1,0,entity.stats.movement))
       end
       --TODO: FIGURE OUT WHY THIS BREAKS COLLISION
       --love.event.push("gameEvent","closeAll")
