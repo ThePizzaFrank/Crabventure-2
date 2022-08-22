@@ -57,11 +57,14 @@ function love.load(arg)
     position = Components.position(5,5),
     camera = camera,
     action = Components.action(0),
-    stats = Components.stats(6),
+    stats = Components.stats(6, 100),
     directionControls = Components.directionControls("w","s","a","d"),
     gameControls = Components.gameControls("`","e","escape"),
     collider = Components.collider(globals.CollisionEnum.Player),
-    cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2)
+    cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2),
+    damageable = Components.damageable(),
+    canAttack = Components.canAttack(10),
+    alliance = Components.alliance(1)
   }
   blob2 = {
     _type = "Individual Wall",
@@ -78,7 +81,10 @@ function love.load(arg)
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Enemy),
     ai = Components.ai(1,blob.position),
-    stats = Components.stats(7),
+    stats = Components.stats(7, 100),
+    damageable = Components.damageable(),
+    canAttack = Components.canAttack(5),
+    alliance = Components.alliance(2)
   }
 
   inventory = PlayerInventory.playerInventory()

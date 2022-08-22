@@ -81,9 +81,11 @@ function action(turns)
   return Action
 end
 
-function stats(movement)
+function stats(movement, maxHp)
   local Stats = {
-    movement = movement
+    movement = movement,
+    maxHp = maxHp,
+    currentHp = maxHp
   }
   return Stats
 end
@@ -314,4 +316,35 @@ function ai(type,target,world)
     target = target,
   }
   return AI
+end
+
+function damageable()
+  local Damageable = {
+    invulnerability = 0
+  }
+  return Damageable
+end
+
+function canAttack(baseDamage)
+  local CanAttack = {
+    baseDamage = baseDamage
+  }
+  return CanAttack
+end
+
+function attack(x, y, baseDamage, turns)
+  local Attack = {
+    baseDamage = baseDamage,
+    turns = turns,
+    x = x,
+    y = y,
+  }
+  return Attack
+end
+
+function alliance(allianceId)
+  local Alliance = {
+    allianceId = allianceId
+  }
+  return Alliance
 end

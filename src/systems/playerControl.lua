@@ -39,8 +39,7 @@ function handleInput(entity,key)
       elseif k == 'right' and passive(entity) then
         Entities:addComponent(entity._id,"movement",Components.movement(1,0,entity.stats.movement))
       end
-      --TODO: FIGURE OUT WHY THIS BREAKS COLLISION
-      --love.event.push("gameEvent","closeAll")
+      love.event.push("gameEvent","closeAll") 
     end
   end
 end
