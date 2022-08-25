@@ -10,7 +10,7 @@ function update(entity)
   local targets = Entities:filterAll(targetFilter, false, true)
   for _,target in pairs(targets) do
     if target._id ~= entity._id then
-      if target.position.x == entity.position.x + entity.attack.x
+      if target.collider.active and target.position.x == entity.position.x + entity.attack.x
         and target.position.y == entity.position.y + entity.attack.y then
         target.stats.currentHp = target.stats.currentHp - entity.attack.baseDamage
         entity.action.turns = entity.attack.turns

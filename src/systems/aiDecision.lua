@@ -27,5 +27,17 @@ function basic(entity)
 end
 --print(entity.movement.turns)
 
-function advanced(entity)
+function aStarPathing(entity)
+  local heuristic = function(position,target)
+    return math.abs(position.x-target.x + position.y -target.y)
+  end
+  --ideally we'd like to store the collision maps
+end
+
+function checkStatic(future,cMap, pos)
+  if cMap[future.x-pos.x] and cMap[future.x-pos.x][future.y-pos.y] then
+    return cMap[future.x-pos.x][future.y-pos.y] >= 1
+  else
+    return false;
+  end
 end

@@ -9,7 +9,7 @@ function player()
   return Player
 end
 
-function collider(type,name)
+function collider(type,name,solid)
   local Collider = {
     width = 1,
     height = 1,
@@ -17,6 +17,7 @@ function collider(type,name)
     active = true,
     id = globals.currentCollider,
     name = name,
+    solid = solid or false
   }
   globals.currentCollider = globals.currentCollider + 1
   return Collider

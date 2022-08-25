@@ -60,7 +60,7 @@ function love.load(arg)
     stats = Components.stats(6, 100),
     directionControls = Components.directionControls("w","s","a","d"),
     gameControls = Components.gameControls("`","e","escape"),
-    collider = Components.collider(globals.CollisionEnum.Player),
+    collider = Components.collider(globals.CollisionEnum.Player,"player_collider",true),
     cameraTarget = Components.cameraTarget(-love.graphics.getWidth()/2,-love.graphics.getHeight()/2),
     damageable = Components.damageable(),
     canAttack = Components.canAttack(10),
@@ -69,9 +69,10 @@ function love.load(arg)
   blob2 = {
     _type = "Individual Wall",
     sprite = Components.sprite("wall_1"),
-    position = Components.position(12,10),
+    position = Components.position(4,4),
     camera = camera,
-    collider = Components.collider(globals.CollisionEnum.Wall)
+    collider = Components.collider(globals.CollisionEnum.Wall,"wall_collider",true),
+    classification = Components.classification(true)
   }
   blob3 = {
     _type = "Enemy",
@@ -79,12 +80,13 @@ function love.load(arg)
     position = Components.position(),
     action = Components.action(0),
     camera = camera,
-    collider = Components.collider(globals.CollisionEnum.Enemy),
+    collider = Components.collider(globals.CollisionEnum.Enemy,"enemy_collider",true),
     ai = Components.ai(1,blob.position),
     stats = Components.stats(7, 100),
     damageable = Components.damageable(),
     canAttack = Components.canAttack(5),
-    alliance = Components.alliance(2)
+    alliance = Components.alliance(2),
+    classification = Components.classification(true)
   }
 
   inventory = PlayerInventory.playerInventory()
@@ -99,6 +101,7 @@ function love.load(arg)
   table.insert(mGen.mapData.requiredEntities,chest)
   table.insert(mGen.mapData.requiredEntities,blob3)
   Entities:add(blob)
+  Entities:add(blob2)
   Entities:add(mGen)
   Entities:add(debugScroller)
   Entities:add(inventory)
