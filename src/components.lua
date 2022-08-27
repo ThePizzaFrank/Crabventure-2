@@ -311,10 +311,13 @@ function userInterface(elements,open,openEvent)
   return UserInterface
 end
 
-function ai(type,target,world)
+function ai(type,target,world, recalcTurns)
   local AI = {
     type = type,
     target = target,
+    existingPath = {},
+    recalcTurns = recalcTurns,
+    remainingTurns = recalcTurns,
   }
   return AI
 end

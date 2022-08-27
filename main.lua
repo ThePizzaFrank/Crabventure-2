@@ -7,6 +7,7 @@ Filter = require("src.utilities.filter")
 ECS = require("src.utilities.entityComponentSystems")
 SystemLoader = require("src.utilities.systemLoader")
 Maze = require("src.utilities.maze")
+BinaryHeap = require("src.utilities.binaryHeap")
 --entities
 StaticTexturedCollisionMap = require("src.entities.staticTexturedCollisionMap")
 StaticTCMGrower = require("src.entities.staticTCMGrower")
@@ -23,6 +24,7 @@ Debug = require("src.systems.debug")
 
 Entities = ECS.Entities
 Systems = ECS.Systems
+
 
 
 
@@ -81,7 +83,7 @@ function love.load(arg)
     action = Components.action(0),
     camera = camera,
     collider = Components.collider(globals.CollisionEnum.Enemy,"enemy_collider",true),
-    ai = Components.ai(1,blob.position),
+    ai = Components.ai(2,blob.position),
     stats = Components.stats(7, 100),
     damageable = Components.damageable(),
     canAttack = Components.canAttack(5),
@@ -107,6 +109,21 @@ function love.load(arg)
   Entities:add(inventory)
   --Entities:add()
   --table.insert(world,builder)
+  local pqt = BinaryHeap.binaryHeap()
+  pqt:insert(2,"two")
+  pqt:print()
+  pqt:insert(4,"four")
+  pqt:print()
+  pqt:insert(6,"six")
+  pqt:print()
+  pqt:insert(7,"seven")
+  pqt:print()
+  pqt:insert(7,"five")
+  pqt:print()
+  pqt:pop()
+  pqt:print()
+  pqt:pop()
+  pqt:print()
 end
 
 function love.draw()
