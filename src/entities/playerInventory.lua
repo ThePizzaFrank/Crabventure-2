@@ -34,7 +34,7 @@ end
 function playerInventoryInterface(elements)
   local PlayerInventoryInterface = {
     _type = "InventoryInterface",
-    userInterface = Components.userInterface(elements,false,"inventoryToggle"),
+    userInterface = Components.userInterface(elements,false,"inventoryToggle",true),
     interfaceVisible = Components.interfaceVisible(false),
   }
   return PlayerInventoryInterface

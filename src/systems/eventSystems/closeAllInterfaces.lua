@@ -5,7 +5,7 @@ Entities = require("src.utilities.entityComponentSystems").Entities
 filter = Filter.filter({"userInterface"})
 
 function update(entity,event)
-  if event == "closeAll" and entity.userInterface.open then
+  if event == "closeAll" and entity.userInterface.open and entity.userInterface.closeable then
     for _,id in pairs(entity.userInterface.elements) do
       childEntity = Entities:get(id,Filter.filter({"interfaceVisible"}))
       if childEntity then

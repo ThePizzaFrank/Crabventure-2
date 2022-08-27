@@ -46,7 +46,7 @@ function chest(x,y,camera)
   table.insert(elements,Entities:add(chestWindow(chest.inventory,xPos,yPos))._id)
   table.insert(elements,Entities:add(chestCloseButton(event,xPos,yPos))._id)
 
-  chest.userInterface = Components.userInterface(elements,false,event)
+  chest.userInterface = Components.userInterface(elements,false,event,true)
   chest.eventEmitter = Components.eventEmitter(event)
   Entities:update(chest)
 
