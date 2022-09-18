@@ -302,11 +302,12 @@ function deleteEvent(event)
   return DeleteEvent
 end
 
-function userInterface(elements,open,openEvent)
+function userInterface(elements,open,openEvent,closeable)
   local UserInterface = {
     elements = elements or {},
     open = open,
     openEvent = openEvent
+    closeable = closeable
   }
   return UserInterface
 end
@@ -351,4 +352,13 @@ function alliance(allianceId)
     allianceId = allianceId
   }
   return Alliance
+end
+
+function statTracker(stats, trackedStat, maxStat)
+  local StatTracker = {
+    stats = stats,
+    trackedStat = trackedStat,
+    maxStat = maxStat
+  }
+  return StatTracker
 end
